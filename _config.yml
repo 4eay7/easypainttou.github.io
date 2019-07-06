@@ -1,0 +1,101 @@
+# Site settings 配置站点
+title: '4eay_lab > blog'
+description: 'a lab notebook'
+keyword: 'blog, cs'
+url: 'http://4eay7lab.com/' # your host
+
+# if you don't need baseurl, you should leave this value blank.
+baseurl: ''
+
+# Navigation links
+nav:
+  home: '/'
+  tags: '/tags.html'
+  about: '/about.html'
+  links: '/links.html'
+
+# Footer
+footer:
+  since: 2019
+
+# Author 配置博主信息
+author: 'eregerm'
+nickname: 'eregerm'
+bio: 'code / game / otaku / paint / enthusiast of philosophy and physics'
+avatar: '/assets/img/profile.png'
+
+# Search
+search: true
+
+# Night mode
+nightMode: true
+
+# Comments 评论功能
+#   default_hidden：是否默认隐藏评论。若是则需要点击一按钮后才显示。 by Ray-Eldath
+comments:
+  default_hidden: true
+  disqus: false
+  disqus_url: 'https://liaokeyu.disqus.com/embed.js'
+
+  livere: false
+  livere_uid: 
+  
+  valine: true
+  valine_appid: ujqX7sNkOdVgojiy68WRHdgO-gzGzoHsz
+  valine_appkey: jIkSo2I8LuKFSUb81kRDFbHa
+
+# Reward 赞赏功能 by Ray-Eldath
+reward:
+  enable: false
+  reward_comment: '...'
+  wechatpay: 'http://ray-eldath.image.alimmdn.com/basic/wechatpay.jpg'
+  alipay: 'http://ray-eldath.image.alimmdn.com/basic/alipay.jpg'
+
+# b2t 回到顶部 by Ray-Eldath
+b2t: true
+
+# MathJax 公式支持 by Ray-Eldath
+mathjax: true
+
+# Share
+social-share: true
+social-share-items: ['wechat', 'weibo', 'douban', 'twitter']
+
+# theme color 主题皮肤
+theme-color: 'default'  # pink or default
+
+# Post header background patterns (when the post no cover): circuitBoard, overlappingCircles, food, glamorous, ticTacToe, seaOfClouds
+postPatterns: 'circuitBoard'
+
+# SNS settings 配置社交网站url: email, weibo, zhihu, twitter, instagram, juejin, github, douban, facebook, dribble, uicn, jianshu, medium, linkedin
+sns:
+  email: 'mailto:974002413@qq.com'
+#  weibo: '//weibo.com/lovecolcol'
+#  juejin: '//juejin.im/user/57a6f434165abd006159b4cc'
+#  instagram: '//www.instagram.com/steveliaocn'
+  github: '//github.com/easypainttou'
+
+# Tags 设置标签
+recommend-tags: true # whether or not display recommend-tags on the sidebar
+recommend-condition-size: 12 # a tag will be recommended if the size of it is more than this value
+
+# Build settings
+paginate: 6
+paginate_path: 'page:num'
+exclude: ['node_modules', 'dev', 'package.json', 'gulpfile.js', '.gitignore', 'README.md']
+
+# Markdown
+markdown: kramdown
+highlighter: rouge
+kramdown:
+  input: GFM
+
+# RSS
+RSS: false
+
+# Permalink
+# See: https://github.com/kaeyleo/jekyll-theme-H2O/issues/35
+permalink: /:year/:month/:day/:title.html
+
+# Plugins
+plugins: [jekyll-paginate]
