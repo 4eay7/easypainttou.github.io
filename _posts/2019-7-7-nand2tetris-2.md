@@ -51,19 +51,19 @@ $\overline{x}=\begin{cases}2^n-x,&x\ne0 \cr 0 ,& otherwise\end{cases}$
 
 ## 半加器（Half-adder）
 
-2个1位的数相加
+2个1位的数相加，不考虑低位的进位。
 
 ![half adder](/images/n2t_2_1.png)
 
 ## 全加器（Full-adder）
 
-3个1位的数相加
+3个1位的数相加，c是来自低位的进位。
 
 ![full adder](/images/n2t_2_2.png)
 
 ## 加法器（Adder）
 
-2个n位的数相加，这里n=16。
+2个n位的数相加，这里n=16。这里实现直接用全加器串联。
 
 ![adder](/images/n2t_2_3.png)
 
