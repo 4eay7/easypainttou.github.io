@@ -50,13 +50,17 @@ blog中会进行关键知识的总结记录。目标是完成前6章。
 
 已经完成的章节：
 
-[ch1](https://4eay7lab.com/2019/07/07/nand2tetris-1.html)
+[ch1 布尔逻辑](https://4eay7lab.com/2019/07/07/nand2tetris-1.html)
 
-[ch2](https://4eay7lab.com/2019/07/07/nand2tetris-2.html)
+[ch2 布尔运算](https://4eay7lab.com/2019/07/07/nand2tetris-2.html)
 
-[ch3](https://4eay7lab.com/2019/07/07/nand2tetris-3.html)
+[ch3 时序逻辑](https://4eay7lab.com/2019/07/07/nand2tetris-3.html)
 
-[ch4](https://4eay7lab.com/2019/07/07/nand2tetris-4.html)
+[ch4 机器语言](https://4eay7lab.com/2019/07/07/nand2tetris-4.html)
+
+[ch5 计算机体系结构](https://4eay7lab.com/2019/07/09/nand2tetris-5.html)
+
+[ch6 汇编器](https://4eay7lab.com/2019/07/11/nand2tetris-6.html)
 
 ## 项目
 
