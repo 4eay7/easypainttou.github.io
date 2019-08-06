@@ -1,38 +1,25 @@
 ---
-title: Hello World
+title: NEW log!
+date: 2019-7-6
+categories: 其它
+tags:
+	- 吐槽
+	- 记录
+	- acm
 ---
-Welcome to [Hexo](https://hexo.io/)! This is your very first post. Check [documentation](https://hexo.io/docs/) for more info. If you get any problems when using Hexo, you can find the answer in [troubleshooting](https://hexo.io/docs/troubleshooting.html) or you can ask me on [GitHub](https://github.com/hexojs/hexo/issues).
 
-## Quick Start
+# 记录
 
-### Create a new post
+## 2019-7-6
 
-``` bash
-$ hexo new "My New Post"
-```
+从wp迁移到jekyll
 
-More info: [Writing](https://hexo.io/docs/writing.html)
+## 2019-8-5~2019-8-7
 
-### Run server
+由于一些jekyll的缺点，从jekyll迁回hexo
 
-``` bash
-$ hexo server
-```
+qwq
 
-More info: [Server](https://hexo.io/docs/server.html)
+# 其它
 
-### Generate static files
-
-``` bash
-$ hexo generate
-```
-
-More info: [Generating](https://hexo.io/docs/generating.html)
-
-### Deploy to remote sites
-
-``` bash
-$ hexo deploy
-```
-
-More info: [Deployment](https://hexo.io/docs/deployment.html)
+[oi/icpc题解传送门](https://github.com/easypainttou/oi_solutions)

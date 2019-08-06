@@ -3,7 +3,6 @@ title: about
 comments: false
 ---
 
-nickname：EReG3rm
-学名：Amorphophalms konjac
+nickname：eregerm
 location：njupt
-e-mail：974002413@qq.com
+e-mail：sumuy233@outlook.com
