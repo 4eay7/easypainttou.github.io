@@ -116,19 +116,20 @@ disqus_shortname: false
 # 是否开启友言评论, 填写友言用户id
 uyan_uid: false
 # 是否使用 gitment，https://github.com/imsun/gitment
-#gitment: false
-gitment:
+gitment: false
+#gitment:
+#  owner: easypainttou
+#  repo: gitment_comments
+#  client_id: c354108a394b0f21401a
+#  client_secret: fc532a46f8321f4488e8533b9849e0980af9e501
+
+# use gitalk://github.com/gitalk/gitalk
+#gitalk: false
+gitalk:
   owner: easypainttou
   repo: gitment_comments
   client_id: c354108a394b0f21401a
   client_secret: fc532a46f8321f4488e8533b9849e0980af9e501
-
-# use gitalk://github.com/gitalk/gitalk
-gitalk: false
-#  owner: 
-#  repo: 
-#  client_id: 
-#  client_secret: 
 
 # Valine Comment system. https://valine.js.org
 valine:
