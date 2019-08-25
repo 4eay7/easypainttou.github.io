@@ -5,4 +5,4 @@ comments: false
 
 nickname：eregerm
 location：njupt
-e-mail：sumuy233@outlook.com
+e-mail：eregerm@outlook.com

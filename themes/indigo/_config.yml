@@ -37,14 +37,14 @@ menu:
 # 你的头像url
 avatar: /img/profile.png
 # avatar link
-avatar_link: /
+avatar_link: /about
 # 头像背景图
 brand: /img/brand.jpg
 # favicon
 favicon: /favicon.ico
 
 # email
-email: sumuy233@outlook.com
+email: eregerm@outlook.com
 
 # 设置 Android L Chrome 浏览器状态栏颜色
 color: '#4B59A9'
