@@ -8,6 +8,6 @@ reward: false
 [YuweiZhao](http://www.cfzhao.com/)
 [Ye Kehuai](https://www.kimiye.xyz/)
 [xgsteins](http://xgsteins.fun/)
-[Brethland](http://www.brethland.com/)
+[Brethland](http://www.yuki.systems/)
 [0xfaner](https://0xfaner.top/)
 [miri chen](https://miri90.github.io/)
