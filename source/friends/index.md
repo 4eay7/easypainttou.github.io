@@ -3,11 +3,11 @@ comments: true
 reward: false
 
 ---
-[friend A](http://www.google.com)
-
-[YuweiZhao](http://www.cfzhao.com/)
-[Ye Kehuai](https://www.kimiye.xyz/)
-[xgsteins](http://xgsteins.fun/)
-[Brethland](http://www.yuki.systems/)
-[0xfaner](https://0xfaner.top/)
-[miri chen](https://miri90.github.io/)
+- [friend A](http://www.google.com)
+---
+- [YuweiZhao](http://www.cfzhao.com/)
+- [Ye Kehuai](https://www.kimiye.xyz/)
+- [xgsteins](http://xgsteins.fun/)
+- [Brethland](http://www.yuki.systems/)
+- [0xfaner](https://0xfaner.top/)
+- [miri chen](https://miri90.github.io/)

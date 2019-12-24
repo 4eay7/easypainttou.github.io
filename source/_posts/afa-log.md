@@ -127,7 +127,7 @@ oi_solutions repo停止更新。
 
 没有抱到大腿，完全靠自己和队友从0开始。
 
-成果：一银一铜（rk100+）
+成果：1银1铜（rk100+）
 
 靠着队友合作以及一部分的运气，最好时是区域赛铜首银尾的水平。。。（能开的都是easy题，毕竟是5小时被卡easy题的蒟蒻qwq）
 
@@ -231,7 +231,7 @@ the best or nothing
 
 [推荐的经验总结](https://blog.csdn.net/weixin_37517391/article/details/84098882)
 
-[推荐的wiki](oi-wiki.org)
+[推荐的wiki](https://oi-wiki.org/)
 
 [顺便推荐一下noj](https://acm.njupt.edu.cn/)
 
