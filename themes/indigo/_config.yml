@@ -24,6 +24,9 @@ menu:
   info:
     text: About
     url: /about
+  file:
+    text: Today
+    url: /today
   github:
     url: https://github.com/easypainttou
     target: _blank
@@ -35,7 +38,7 @@ menu:
 #    url: /custom
 
 # 你的头像url
-avatar: /img/profile.png
+avatar: /img/img-loading.png
 # avatar link
 avatar_link: /about
 # 头像背景图
@@ -86,7 +89,7 @@ toc:
   list_number: true  # 是否显示数字排序
 
 # 文章页留言内容，hexo中所有变量及辅助函数等均可调用，具体请查阅 hexo.io
-postMessage: <del>self closing</del>
+postMessage: 4 every answer y 4eay7 ?
 
 # 站长统计，如要开启，输入CNZZ站点id，如 cnzz: 1255152447
 cnzz: false
@@ -158,7 +161,7 @@ canonical: false
 since_year: 2019
 
 # 用户页面中作者相关的描述性文字，如不需要设为 false
-about: code / game / otaku / art / enthusiast of philosophy and physics ...
+about: code / game / otaku / art / physics / philosophy ...
 
 # “不蒜子”访问量统计，详见 http://ibruce.info/2015/04/04/busuanzi/
 visit_counter:

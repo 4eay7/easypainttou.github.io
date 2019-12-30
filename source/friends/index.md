@@ -1,10 +1,13 @@
 title: friends
-comments: true
+comments: false
 reward: false
 
 ---
+
 - [friend A](http://www.google.com)
+
 ---
+
 - [YuweiZhao](http://www.cfzhao.com/)
 - [Ye Kehuai](https://www.kimiye.xyz/)
 - [xgsteins](http://xgsteins.fun/)

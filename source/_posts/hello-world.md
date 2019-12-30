@@ -3,9 +3,8 @@ title: NEW log!
 date: 2019-7-6
 categories: 其它
 tags:
-	- 吐槽
 	- 记录
-	- acm
+top: true
 ---
 
 # 记录
@@ -18,7 +17,11 @@ tags:
 
 由于一些jekyll的缺点，从jekyll迁回hexo
 
-qwq
+## 2019-12-31
+
+添加了置顶
+
+---
 
 # 其它
 
