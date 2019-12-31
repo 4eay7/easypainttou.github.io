@@ -133,7 +133,7 @@ tags:
 
 一打完就赶紧溜回去汇编期末考试了。。。
 
-![2019icpc南京区域赛](/images/afa-4.jpg)
+![2019icpc南京区域赛](/images/afa-4.jpeg)
 
 从此自认退役，想着再也不打。。。
 
@@ -163,7 +163,7 @@ oi_solutions repo停止更新。
 
 - 认识了dalao们和女装dalao们（打acm的感觉像回家一样，在a协里的感觉比家里感觉好多了！里面个个都是人才，说话又好听，我超喜欢里面的！）
 
-- 功利上来说，保研考研有点帮助（主要加能力分，虽然我决定不读研），工作可过简历关？（玄学，主要看脸，以及这样做也有可能坑自己，算法题不出或者变难）
+- 功利上来说，保研考研有点帮助（主要加能力分，虽然我决定不读研），工作可过简历关？（玄学，主要看脸。以及据说这样做也有可能坑自己，算法题不出或者变难）
 
 ![太棒了，学到许多](/images/afa-1.jpeg)
 
@@ -261,7 +261,7 @@ xcpc比赛都是3个人用1台电脑。
 
 ## 其它
 
-the best or nothing
+> the best or nothing
 
 既然进来打了，就不要划水了，努力争取，不要留下遗憾，否则最后可能浪费了几年时间而一无所得。
 
@@ -279,15 +279,11 @@ the best or nothing
 
 [顺便推荐一下noj](https://acm.njupt.edu.cn/)
 
-<del>
+<del>[劝退1](https://www.zhihu.com/answer/12710541)</del>
 
-[劝退1](https://www.zhihu.com/answer/12710541)
+<del>[劝退2](https://www.zhihu.com/answer/27597264)</del>
 
-[劝退2](https://www.zhihu.com/answer/27597264)
-
-[劝退3](https://www.zhihu.com/answer/387430434)
-
-</del>
+<del>[劝退3](https://www.zhihu.com/answer/387430434)</del>
 
 ---
 # 附
