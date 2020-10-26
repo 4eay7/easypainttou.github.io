@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>nand2tetris ch0 介绍 | 4eay7_lab &gt; blog | a lab notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#4B59A9">
+    
+    
+    <meta name="keywords" content="计算机系统,nand2tetris,本科补全">
+    <meta name="description" content="概述这是一门基于项目的自下而上构建计算机的有趣的课程。 按照以下层次自下而上讲解每一层的构建，每到一层只关心这一层的实现，不关注下面层次的具体实现。 总体不深入，比较浅显易懂。现代计算机体系结构中的2个重要的概念，流水线和存储层次，几乎没有涉及。">
+<meta name="keywords" content="计算机系统,nand2tetris,本科补全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nand2tetris ch0 介绍">
+<meta property="og:url" content="https://4eay7lab.com/2019/07/07/nand2tetris-0/index.html">
+<meta property="og:site_name" content="4eay7_lab &gt; blog">
+<meta property="og:description" content="概述这是一门基于项目的自下而上构建计算机的有趣的课程。 按照以下层次自下而上讲解每一层的构建，每到一层只关心这一层的实现，不关注下面层次的具体实现。 总体不深入，比较浅显易懂。现代计算机体系结构中的2个重要的概念，流水线和存储层次，几乎没有涉及。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_0_0.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_0_1.png">
+<meta property="og:updated_time" content="2020-10-26T07:31:31.404Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="nand2tetris ch0 介绍">
+<meta name="twitter:description" content="概述这是一门基于项目的自下而上构建计算机的有趣的课程。 按照以下层次自下而上讲解每一层的构建，每到一层只关心这一层的实现，不关注下面层次的具体实现。 总体不深入，比较浅显易懂。现代计算机体系结构中的2个重要的概念，流水线和存储层次，几乎没有涉及。">
+<meta name="twitter:image" content="https://4eay7lab.com/images/n2t_0_0.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="4eay7_lab &gt; blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/about" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/profile.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">eregerm</h5>
+          <a href="mailto:eregerm@outlook.com" title="eregerm@outlook.com" class="mail">eregerm@outlook.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/friends"  >
+                <i class="icon icon-lg icon-link"></i>
+                Friends
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-info"></i>
+                About
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/today"  >
+                <i class="icon icon-lg icon-file"></i>
+                Today
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/easypainttou" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">nand2tetris ch0 介绍</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">nand2tetris ch0 介绍</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2019-07-06T16:00:00.000Z" itemprop="datePublished" class="page-time">
+  2019-07-07
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/课程/">课程</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#概述"><span class="post-toc-number">1.</span> <span class="post-toc-text">概述</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#相关资源"><span class="post-toc-number">2.</span> <span class="post-toc-text">相关资源</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#本课程"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">本课程</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#其它相关课程"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">其它相关课程</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#其它"><span class="post-toc-number">3.</span> <span class="post-toc-text">其它</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#笔记"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">笔记</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#项目"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">项目</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-nand2tetris-0"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">nand2tetris ch0 介绍</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-07-07 00:00:00" datetime="2019-07-06T16:00:00.000Z"  itemprop="datePublished">2019-07-07</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/课程/">课程</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+			
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>这是一门基于项目的自下而上构建计算机的有趣的课程。</p>
+<p>按照以下层次自下而上讲解每一层的构建，每到一层只关心这一层的实现，不关注下面层次的具体实现。</p>
+<p>总体不深入，比较浅显易懂。现代计算机体系结构中的2个重要的概念，流水线和存储层次，几乎没有涉及。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_0_0.png" alt="课程内容" title>
+                </div>
+                <div class="image-caption">课程内容</div>
+            </figure>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_0_1.png" alt="典型计算机系统设计中的组成要素的抽象" title>
+                </div>
+                <div class="image-caption">典型计算机系统设计中的组成要素的抽象</div>
+            </figure>
+<h1 id="相关资源"><a href="#相关资源" class="headerlink" title="相关资源"></a>相关资源</h1><h2 id="本课程"><a href="#本课程" class="headerlink" title="本课程"></a>本课程</h2><p><a href="https://www.nand2tetris.org/" target="_blank" rel="noopener">官网</a></p>
+<p><a href="https://www.coursera.org/learn/build-a-computer" target="_blank" rel="noopener">coursera(硬件部分)</a></p>
+<p><a href="https://www.coursera.org/learn/nand2tetris2" target="_blank" rel="noopener">coursera(软件部分)</a></p>
+<p>配套书籍：<em>The Elements of Computing Systems: Building a Modern Computer from First Principles</em></p>
+<h2 id="其它相关课程"><a href="#其它相关课程" class="headerlink" title="其它相关课程"></a>其它相关课程</h2><p><a href="http://inst.eecs.berkeley.edu/~cs61c/sp15/" target="_blank" rel="noopener">Berkeley’s CS61C</a></p>
+<p>计组最经典的还是这本 _(:°з」∠)_：<br><em>Computer Organization and Design MIPS Edition: The Hardware/Software Interface (The Morgan Kaufmann Series in Computer Architecture and Design)</em></p>
+<h1 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h1><h2 id="笔记"><a href="#笔记" class="headerlink" title="笔记"></a>笔记</h2><p>blog中会进行关键知识的总结记录。目标是完成前6章。</p>
+<p>已经完成的章节：</p>
+<p><a href="https://4eay7lab.com/2019/07/07/nand2tetris-1.html">ch1 布尔逻辑</a></p>
+<p><a href="https://4eay7lab.com/2019/07/07/nand2tetris-2.html">ch2 布尔运算</a></p>
+<p><a href="https://4eay7lab.com/2019/07/07/nand2tetris-3.html">ch3 时序逻辑</a></p>
+<p><a href="https://4eay7lab.com/2019/07/07/nand2tetris-4.html">ch4 机器语言</a></p>
+<p><a href="https://4eay7lab.com/2019/07/09/nand2tetris-5.html">ch5 计算机体系结构</a></p>
+<p><a href="https://4eay7lab.com/2019/07/11/nand2tetris-6.html">ch6 汇编器</a></p>
+<h2 id="项目"><a href="#项目" class="headerlink" title="项目"></a>项目</h2><p><a href="https://github.com/easypainttou/nand2tetris_solutions" target="_blank" rel="noopener">我的projects解决方案</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2020-10-26T07:31:31.404Z" itemprop="dateUpdated">2020-10-26 15:31:31</time>
+</span><br>
+
+
+        
+        4 every answer y 4eay7 ?
+        
+    </div>
+    
+    <footer>
+        <a href="https://4eay7lab.com">
+            <img src="/img/profile.png" alt="eregerm">
+            eregerm
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nand2tetris/">nand2tetris</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/本科补全/">本科补全</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/计算机系统/">计算机系统</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://4eay7lab.com/2019/07/07/nand2tetris-0/&title=《nand2tetris ch0 介绍》 — 4eay7_lab > blog&pic=https://4eay7lab.com/img/profile.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://4eay7lab.com/2019/07/07/nand2tetris-0/&title=《nand2tetris ch0 介绍》 — 4eay7_lab > blog&source=a lab notebook" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://4eay7lab.com/2019/07/07/nand2tetris-0/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《nand2tetris ch0 介绍》 — 4eay7_lab > blog&url=https://4eay7lab.com/2019/07/07/nand2tetris-0/&via=https://4eay7lab.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://4eay7lab.com/2019/07/07/nand2tetris-0/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2019/07/07/nand2tetris-1/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">nand2tetris ch1 布尔逻辑</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/07/06/hello-world/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">NEW log!</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+        var id = location.pathname
+        if (location.pathname.length > 50) {
+          id = location.pathname.replace(/\/\d+\/\d+\/\d+\//, '').replace('/', '').substring(0, 50)
+        }
+        const gitalk = new Gitalk({
+          clientID: 'c354108a394b0f21401a',
+          clientSecret: 'fc532a46f8321f4488e8533b9849e0980af9e501',
+          repo: 'blog_comments',
+          owner: 'easypainttou',
+          admin: ['easypainttou'],
+          id: id,      // Ensure uniqueness and length less than 50
+          title: document.title.split('|')[0],
+          distractionFreeMode: false  // Facebook-like distraction free mode
+        })
+
+        gitalk.render('gitalk-container')
+    </script>
+</section>
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>eregerm &copy; 2019 - 2020</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://4eay7lab.com/2019/07/07/nand2tetris-0/&title=《nand2tetris ch0 介绍》 — 4eay7_lab > blog&pic=https://4eay7lab.com/img/profile.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://4eay7lab.com/2019/07/07/nand2tetris-0/&title=《nand2tetris ch0 介绍》 — 4eay7_lab > blog&source=a lab notebook" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://4eay7lab.com/2019/07/07/nand2tetris-0/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《nand2tetris ch0 介绍》 — 4eay7_lab > blog&url=https://4eay7lab.com/2019/07/07/nand2tetris-0/&via=https://4eay7lab.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://4eay7lab.com/2019/07/07/nand2tetris-0/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACLklEQVR42u3awYrDMAxF0f7/T2e2hVL3PikZsHW9CiUT+3hAWJJfLzyut/H5y/vv6/fJ8+fXbhsyZMjYlnEtx/qdzkaQL5O1yZAhYw7j28Tr537QXP8tWZsMGTJkrCdbB8paqJUhQ4aMPmP9CwmgJAGWIUOGjH7gIww0/bJ490guLkOGjA0ZtVTzf54f6W/IkCFjK8YVDh4c+4fFYFUyZMg4msEDXFpcI8fH2uHy65syZMg4lMGLX2mCWgvZacKM9liGDBmbM+4NuGmhv3aI/PE/kSFDxnEMEkzTFJQEX9IwCN6XIUPGYEYaKEnQbF2n4NcsZMiQcRwjveaVNhrTlDVOoWXIkDGAwcMiX0Tty8XgK0OGjPEMfjGCl8lqN76CFqYMGTIOYtQ6CZ2yWrpBwTFRhgwZhzLibie+vMW/XCu9yZAhYxqjdSDD0/M2Z7qhMmTIOJvBD4Jpk7JT9CcB/ZVGZRkyZGzO6JTJeFm/k9byrZEhQ8bZjBqmduDjFziK4ViGDBnHMWoXvGqpZnroDGaXIUPGAEa/uEYOjjwEp5slQ4aMCYwOiRfIyKUKHu5lyJAxgXGFgyydfIGnqSjdlSFDxtGMWmeQk3hBjSe9N3RrZciQsSGDB9k+tXMJ47aMWYYMGdsyeKB8gpSmskF/Q4YMGSMZpBn5xDWOoDEgQ4YMGY0rFLUlojAtQ4aMAYxaM4BvAQnEPJGWIUPGNEatltWZphZwb2hkypAhYz/GHwEyapgfYpgxAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

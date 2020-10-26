@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>nand2tetris ch6 汇编器 | 4eay7_lab &gt; blog | a lab notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#4B59A9">
+    
+    
+    <meta name="keywords" content="计算机系统,nand2tetris,本科补全">
+    <meta name="description" content="这一章没多少新内容，主要是按照规则写个汇编器。。。 概述从第6章开始将开始关注计算机的软件层次，其中，汇编器是最基础的模块。 符号汇编指令和相应的二进制编码之间的关系很直接，所以写一个汇编器不难。唯一的困难是管理用户定义符号并解析到物理内存地址，通常会使用符号表（数据结构是哈希表）来完成，这在许多软件翻译项目中都有用到。 由于二进制码的含义相当晦涩，通常机器语言会指定它的二进制码（Binary c">
+<meta name="keywords" content="计算机系统,nand2tetris,本科补全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nand2tetris ch6 汇编器">
+<meta property="og:url" content="https://4eay7lab.com/2019/07/11/nand2tetris-6/index.html">
+<meta property="og:site_name" content="4eay7_lab &gt; blog">
+<meta property="og:description" content="这一章没多少新内容，主要是按照规则写个汇编器。。。 概述从第6章开始将开始关注计算机的软件层次，其中，汇编器是最基础的模块。 符号汇编指令和相应的二进制编码之间的关系很直接，所以写一个汇编器不难。唯一的困难是管理用户定义符号并解析到物理内存地址，通常会使用符号表（数据结构是哈希表）来完成，这在许多软件翻译项目中都有用到。 由于二进制码的含义相当晦涩，通常机器语言会指定它的二进制码（Binary c">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_6_0.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_4_4.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_4_5.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_4_6.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_4_7.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_4_8.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_6_1.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_6_2.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_6_3.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_6_4.png">
+<meta property="og:updated_time" content="2020-10-26T07:31:31.407Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="nand2tetris ch6 汇编器">
+<meta name="twitter:description" content="这一章没多少新内容，主要是按照规则写个汇编器。。。 概述从第6章开始将开始关注计算机的软件层次，其中，汇编器是最基础的模块。 符号汇编指令和相应的二进制编码之间的关系很直接，所以写一个汇编器不难。唯一的困难是管理用户定义符号并解析到物理内存地址，通常会使用符号表（数据结构是哈希表）来完成，这在许多软件翻译项目中都有用到。 由于二进制码的含义相当晦涩，通常机器语言会指定它的二进制码（Binary c">
+<meta name="twitter:image" content="https://4eay7lab.com/images/n2t_6_0.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="4eay7_lab &gt; blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/about" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/profile.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">eregerm</h5>
+          <a href="mailto:eregerm@outlook.com" title="eregerm@outlook.com" class="mail">eregerm@outlook.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/friends"  >
+                <i class="icon icon-lg icon-link"></i>
+                Friends
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-info"></i>
+                About
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/today"  >
+                <i class="icon icon-lg icon-file"></i>
+                Today
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/easypainttou" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">nand2tetris ch6 汇编器</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">nand2tetris ch6 汇编器</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2019-07-10T16:00:00.000Z" itemprop="datePublished" class="page-time">
+  2019-07-11
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/课程/">课程</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#概述"><span class="post-toc-number">1.</span> <span class="post-toc-text">概述</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#符号"><span class="post-toc-number">2.</span> <span class="post-toc-text">符号</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#变量"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">变量</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#标签"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">标签</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#符号解析"><span class="post-toc-number">3.</span> <span class="post-toc-text">符号解析</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#汇编器"><span class="post-toc-number">4.</span> <span class="post-toc-text">汇编器</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Hack汇编翻译规范"><span class="post-toc-number">5.</span> <span class="post-toc-text">Hack汇编翻译规范</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#语法传统和文件格式"><span class="post-toc-number">5.1.</span> <span class="post-toc-text">语法传统和文件格式</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#二进制文件（Binary-code-files）"><span class="post-toc-number">5.1.1.</span> <span class="post-toc-text">二进制文件（Binary code files）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#汇编文件（Assembly-language-files）"><span class="post-toc-number">5.1.2.</span> <span class="post-toc-text">汇编文件（Assembly language files）</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#指令"><span class="post-toc-number">5.2.</span> <span class="post-toc-text">指令</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#符号-1"><span class="post-toc-number">5.3.</span> <span class="post-toc-text">符号</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#预定义符号（Predefined-symbols）"><span class="post-toc-number">5.3.1.</span> <span class="post-toc-text">预定义符号（Predefined symbols）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#标记符号（Label-symbols）"><span class="post-toc-number">5.3.2.</span> <span class="post-toc-text">标记符号（Label symbols）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#变量符号（Variable-symbols）"><span class="post-toc-number">5.3.3.</span> <span class="post-toc-text">变量符号（Variable symbols）</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#API"><span class="post-toc-number">5.4.</span> <span class="post-toc-text">API</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Parser"><span class="post-toc-number">5.4.1.</span> <span class="post-toc-text">Parser</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Code"><span class="post-toc-number">5.4.2.</span> <span class="post-toc-text">Code</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#无符号汇编器"><span class="post-toc-number">5.4.3.</span> <span class="post-toc-text">无符号汇编器</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#SymbolTable"><span class="post-toc-number">5.4.4.</span> <span class="post-toc-text">SymbolTable</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#有符号汇编器"><span class="post-toc-number">5.4.5.</span> <span class="post-toc-text">有符号汇编器</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#项目"><span class="post-toc-number">6.</span> <span class="post-toc-text">项目</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-nand2tetris-6"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">nand2tetris ch6 汇编器</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-07-11 00:00:00" datetime="2019-07-10T16:00:00.000Z"  itemprop="datePublished">2019-07-11</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/课程/">课程</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+			
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>这一章没多少新内容，主要是按照规则写个汇编器。。。</p>
+<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>从第6章开始将开始关注计算机的软件层次，其中，汇编器是最基础的模块。</p>
+<p>符号汇编指令和相应的二进制编码之间的关系很直接，所以写一个汇编器不难。唯一的困难是管理用户定义符号并解析到物理内存地址，通常会使用符号表（数据结构是哈希表）来完成，这在许多软件翻译项目中都有用到。</p>
+<p>由于二进制码的含义相当晦涩，通常机器语言会指定它的二进制码（Binary codes）和符号助记符（Symbolic mnemonics）。我们不仅可以借助符号读程序，也可以这样写程序而不必使用二进制。我们可以使用一个文本处理程序，将符号解析为二进制机器指令。这个符号就叫做汇编语言（Assembly），这个程序叫做汇编器（Assembler），这个过程叫做汇编。</p>
+<h1 id="符号"><a href="#符号" class="headerlink" title="符号"></a>符号</h1><p>汇编语言中会出现符号，符号指代内存中的地址。</p>
+<h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><p>程序员用到的符号变量名，翻译器会自动分配到内存地址。</p>
+<h2 id="标签"><a href="#标签" class="headerlink" title="标签"></a>标签</h2><p>程序员用标签标记程序中的不同位置。</p>
+<h1 id="符号解析"><a href="#符号解析" class="headerlink" title="符号解析"></a>符号解析</h1><p>把有符号的程序转换成无符号的代码。</p>
+<p>一个例子：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_6_0.png" alt="一个例子" title>
+                </div>
+                <div class="image-caption">一个例子</div>
+            </figure>
+<h1 id="汇编器"><a href="#汇编器" class="headerlink" title="汇编器"></a>汇编器</h1><p>我们看到汇编器本质上是一个提供翻译服务的文本处理程序。 </p>
+<p>汇编器需要遵守机器语言规范（machine language specification），执行以下任务（不一定是这个顺序）：</p>
+<ul>
+<li>将符号指令解析为其基础字段。</li>
+<li>对于每个字段，用机器语言生成相应的位。</li>
+<li>用内存的数字地址替换所有符号引用（如果有）。</li>
+<li>将二进制代码汇编成完整的机器指令。</li>
+</ul>
+<p>除了替换符号为地址这一步，其它3步都比较简单。</p>
+<h1 id="Hack汇编翻译规范"><a href="#Hack汇编翻译规范" class="headerlink" title="Hack汇编翻译规范"></a>Hack汇编翻译规范</h1><h2 id="语法传统和文件格式"><a href="#语法传统和文件格式" class="headerlink" title="语法传统和文件格式"></a>语法传统和文件格式</h2><h3 id="二进制文件（Binary-code-files）"><a href="#二进制文件（Binary-code-files）" class="headerlink" title="二进制文件（Binary code files）"></a>二进制文件（Binary code files）</h3><p>扩展名为hack。一行一个16位01串，指定一个机器语言指令。第n行地址为n（n是从0开始的）。</p>
+<h3 id="汇编文件（Assembly-language-files）"><a href="#汇编文件（Assembly-language-files）" class="headerlink" title="汇编文件（Assembly language files）"></a>汇编文件（Assembly language files）</h3><p>扩展名为asm。</p>
+<p>每行为一个Instruction或者 (Symbol)。</p>
+<p>常量非负且为10进制，用户定义的符号可以是字母、数字、下划线（_）、点（.）、美元符号（$）、冒号（:），不能以数字开头。</p>
+<p>//后为单行注释。</p>
+<p>空白、空行忽略。</p>
+<p>约定助记符、标记名大写，变量名小写。</p>
+<h2 id="指令"><a href="#指令" class="headerlink" title="指令"></a>指令</h2><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_4_4.png" alt="A" title>
+                </div>
+                <div class="image-caption">A</div>
+            </figure>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_4_5.png" alt="C" title>
+                </div>
+                <div class="image-caption">C</div>
+            </figure>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_4_6.png" alt="comp" title>
+                </div>
+                <div class="image-caption">comp</div>
+            </figure>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_4_7.png" alt="dest" title>
+                </div>
+                <div class="image-caption">dest</div>
+            </figure>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_4_8.png" alt="jump" title>
+                </div>
+                <div class="image-caption">jump</div>
+            </figure>
+<h2 id="符号-1"><a href="#符号-1" class="headerlink" title="符号"></a>符号</h2><h3 id="预定义符号（Predefined-symbols）"><a href="#预定义符号（Predefined-symbols）" class="headerlink" title="预定义符号（Predefined symbols）"></a>预定义符号（Predefined symbols）</h3><p>RAM的一部分地址可以用预定义符号指定。</p>
+<ul>
+<li>虚拟寄存器（Virtual registers）：用R0~R15指定RAM[0]~RAM[15]。</li>
+<li>预定义指针（Predefined pointers）：用SP、LCL、ARG、THIS、THAT指定RAM[0]~RAM[4]。</li>
+<li>I/O指针（I/O pointers）：用SCREEN、KBD指定RAM[16384]（RAM[0x4000]）和RAM[24576]（RAM[0x6000]），这是屏幕和键盘的内存映射的基地址。</li>
+</ul>
+<h3 id="标记符号（Label-symbols）"><a href="#标记符号（Label-symbols）" class="headerlink" title="标记符号（Label symbols）"></a>标记符号（Label symbols）</h3><p>用户定义的用于表示goto的目的地址的符号，用伪命令“(Xxx)”来声明。</p>
+<h3 id="变量符号（Variable-symbols）"><a href="#变量符号（Variable-symbols）" class="headerlink" title="变量符号（Variable symbols）"></a>变量符号（Variable symbols）</h3><p>用户定义的符号Xxx，Xxx不是预定义符号和标记符号，那么就是一个变量，汇编器会分配一个唯一的内存地址，从RAM[0x0010]开始。</p>
+<h2 id="API"><a href="#API" class="headerlink" title="API"></a>API</h2><p>官方提供了可以参考的API。</p>
+<h3 id="Parser"><a href="#Parser" class="headerlink" title="Parser"></a>Parser</h3><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_6_1.png" alt="parser" title>
+                </div>
+                <div class="image-caption">parser</div>
+            </figure>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_6_2.png" alt="parser" title>
+                </div>
+                <div class="image-caption">parser</div>
+            </figure>
+<h3 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h3><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_6_3.png" alt="parser" title>
+                </div>
+                <div class="image-caption">parser</div>
+            </figure>
+<h3 id="无符号汇编器"><a href="#无符号汇编器" class="headerlink" title="无符号汇编器"></a>无符号汇编器</h3><p>用以上2个模块即可。</p>
+<h3 id="SymbolTable"><a href="#SymbolTable" class="headerlink" title="SymbolTable"></a>SymbolTable</h3><p>就是一个哈希表。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_6_4.png" alt="parser" title>
+                </div>
+                <div class="image-caption">parser</div>
+            </figure>
+<h3 id="有符号汇编器"><a href="#有符号汇编器" class="headerlink" title="有符号汇编器"></a>有符号汇编器</h3><p>用上符号表，按照以下步骤实现有符号汇编器：</p>
+<ul>
+<li>初始化：把预定义符号添加到符号表。</li>
+<li>第一遍：扫描一遍，把标记符号添加到符号表。</li>
+<li>第二遍：扫描一遍，把变量符号（只会出现在A指令）添加到符号表，完成指令的翻译。</li>
+</ul>
+<h1 id="项目"><a href="#项目" class="headerlink" title="项目"></a>项目</h1><p>用任意编程语言开发一个汇编器，能将asm文件汇编为hack文件。要求和官方提供的汇编器的汇编功能一致。可能用到的工具依然是官方提供的汇编器。。。</p>
+<p>（我的代码见github</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2020-10-26T07:31:31.407Z" itemprop="dateUpdated">2020-10-26 15:31:31</time>
+</span><br>
+
+
+        
+        4 every answer y 4eay7 ?
+        
+    </div>
+    
+    <footer>
+        <a href="https://4eay7lab.com">
+            <img src="/img/profile.png" alt="eregerm">
+            eregerm
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nand2tetris/">nand2tetris</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/本科补全/">本科补全</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/计算机系统/">计算机系统</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://4eay7lab.com/2019/07/11/nand2tetris-6/&title=《nand2tetris ch6 汇编器》 — 4eay7_lab > blog&pic=https://4eay7lab.com/img/profile.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://4eay7lab.com/2019/07/11/nand2tetris-6/&title=《nand2tetris ch6 汇编器》 — 4eay7_lab > blog&source=a lab notebook" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://4eay7lab.com/2019/07/11/nand2tetris-6/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《nand2tetris ch6 汇编器》 — 4eay7_lab > blog&url=https://4eay7lab.com/2019/07/11/nand2tetris-6/&via=https://4eay7lab.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://4eay7lab.com/2019/07/11/nand2tetris-6/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2019/08/05/sicp-123/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">sicp ch1-3 笔记</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/07/09/nand2tetris-5/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">nand2tetris ch5 计算机体系结构</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+        var id = location.pathname
+        if (location.pathname.length > 50) {
+          id = location.pathname.replace(/\/\d+\/\d+\/\d+\//, '').replace('/', '').substring(0, 50)
+        }
+        const gitalk = new Gitalk({
+          clientID: 'c354108a394b0f21401a',
+          clientSecret: 'fc532a46f8321f4488e8533b9849e0980af9e501',
+          repo: 'blog_comments',
+          owner: 'easypainttou',
+          admin: ['easypainttou'],
+          id: id,      // Ensure uniqueness and length less than 50
+          title: document.title.split('|')[0],
+          distractionFreeMode: false  // Facebook-like distraction free mode
+        })
+
+        gitalk.render('gitalk-container')
+    </script>
+</section>
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>eregerm &copy; 2019 - 2020</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://4eay7lab.com/2019/07/11/nand2tetris-6/&title=《nand2tetris ch6 汇编器》 — 4eay7_lab > blog&pic=https://4eay7lab.com/img/profile.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://4eay7lab.com/2019/07/11/nand2tetris-6/&title=《nand2tetris ch6 汇编器》 — 4eay7_lab > blog&source=a lab notebook" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://4eay7lab.com/2019/07/11/nand2tetris-6/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《nand2tetris ch6 汇编器》 — 4eay7_lab > blog&url=https://4eay7lab.com/2019/07/11/nand2tetris-6/&via=https://4eay7lab.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://4eay7lab.com/2019/07/11/nand2tetris-6/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACMUlEQVR42u3aS27DMAxF0ex/0+k0g0i+j3QDmLoeBW4a6WhA8KPXCz/v7bP//ucb8nn1mzc8MmTIeCyDbHG1AF+SwPbrXhyfDBkyDmCsFuZL1oLm/rDI3mTIkCFj9Z39Gx6sSaCXIUOGjFrA5eGSpHr8+GTIkHEygwc+3mJDy/++FpchQ8YDGbVS8zef/2W+IUOGjEcx3uGzL1/J+zSkol3JkCFjNIMHuBqStNhqQwUZMmScxuDXKVIAL035yOHi6GXIkDGOkY4M+TCyVgCnFy++ZLgyZMgYx6iVoCRY8/CaFsZohClDhoxBjH66lgbN1nUKcltEhgwZ4xhpacqvdtUSx/R/ZciQcQKjdsWhj+wnjl9qcRkyZBzASANxP/lLb3wt38uQIWM0o/bPvFnGfz89MnQ0MmTIGM3gG+oPIGutNxkyZMhIS9POdYqUHWBkyJAxgsFTtDTV6zT94+RPhgwZoxm1kWTaUKsdRHw0MmTIGM24C8YTPpJKpjwZMmTMZqQFZO0a2V2/s/yODBkyDmCkQbPTpOsE5eUeZMiQcQyDlJqdiWg/6byoxWXIkDGO8Q6f2vWL/XbJcOLiuGXIkDGaUQuUfDHeUONF721jThkyZDyKkQbZ2lZqI88gVZUhQ8YBDF7cpm21tLmWJp0yZMiQkQbQtFit9QjRfEOGDBnHM3iLjVyb4KPQiyJWhgwZoxk8pePXvPima4W0DBkyzmHw0pH8tTa27I8KZMiQMZTxB5m9A/Gw8DfsAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

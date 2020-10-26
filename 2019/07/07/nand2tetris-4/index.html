@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>nand2tetris ch4 机器语言 | 4eay7_lab &gt; blog | a lab notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#4B59A9">
+    
+    
+    <meta name="keywords" content="计算机系统,nand2tetris,本科补全">
+    <meta name="description" content="概述机器语言处于软件和硬件之间，既是一个编程工具，也是硬件平台的组成部分。它旨在编写低级程序当作一系列的机器指令，这些指令命令处理器执行算术和逻辑运算、从内存中存取值、将一个寄存器的值移动到另一个寄存器、测试布尔条件等。和高级语言不同，机器语言的要求是直接执行和完全控制特定的硬件平台。 了解用机器语言编写的低级程序，可以方便我们熟悉计算机系统。这不仅帮助我们理解如何编程，而且可以知道硬件为何这样设">
+<meta name="keywords" content="计算机系统,nand2tetris,本科补全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nand2tetris ch4 机器语言">
+<meta property="og:url" content="https://4eay7lab.com/2019/07/07/nand2tetris-4/index.html">
+<meta property="og:site_name" content="4eay7_lab &gt; blog">
+<meta property="og:description" content="概述机器语言处于软件和硬件之间，既是一个编程工具，也是硬件平台的组成部分。它旨在编写低级程序当作一系列的机器指令，这些指令命令处理器执行算术和逻辑运算、从内存中存取值、将一个寄存器的值移动到另一个寄存器、测试布尔条件等。和高级语言不同，机器语言的要求是直接执行和完全控制特定的硬件平台。 了解用机器语言编写的低级程序，可以方便我们熟悉计算机系统。这不仅帮助我们理解如何编程，而且可以知道硬件为何这样设">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_4_0.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_4_1.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_4_2.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_4_3.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_4_4.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_4_5.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_4_6.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_4_7.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_4_8.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_4_9.png">
+<meta property="og:updated_time" content="2020-10-26T07:31:31.406Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="nand2tetris ch4 机器语言">
+<meta name="twitter:description" content="概述机器语言处于软件和硬件之间，既是一个编程工具，也是硬件平台的组成部分。它旨在编写低级程序当作一系列的机器指令，这些指令命令处理器执行算术和逻辑运算、从内存中存取值、将一个寄存器的值移动到另一个寄存器、测试布尔条件等。和高级语言不同，机器语言的要求是直接执行和完全控制特定的硬件平台。 了解用机器语言编写的低级程序，可以方便我们熟悉计算机系统。这不仅帮助我们理解如何编程，而且可以知道硬件为何这样设">
+<meta name="twitter:image" content="https://4eay7lab.com/images/n2t_4_0.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="4eay7_lab &gt; blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/about" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/profile.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">eregerm</h5>
+          <a href="mailto:eregerm@outlook.com" title="eregerm@outlook.com" class="mail">eregerm@outlook.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/friends"  >
+                <i class="icon icon-lg icon-link"></i>
+                Friends
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-info"></i>
+                About
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/today"  >
+                <i class="icon icon-lg icon-file"></i>
+                Today
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/easypainttou" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">nand2tetris ch4 机器语言</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">nand2tetris ch4 机器语言</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2019-07-06T16:00:04.000Z" itemprop="datePublished" class="page-time">
+  2019-07-07
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/课程/">课程</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#概述"><span class="post-toc-number">1.</span> <span class="post-toc-text">概述</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#机器（Machines）"><span class="post-toc-number">2.</span> <span class="post-toc-text">机器（Machines）</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#内存（Memory）"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">内存（Memory）</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#处理器（Processor）"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">处理器（Processor）</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#寄存器（Register）"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">寄存器（Register）</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#语言（Languages）"><span class="post-toc-number">3.</span> <span class="post-toc-text">语言（Languages）</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#指令（Commands）"><span class="post-toc-number">4.</span> <span class="post-toc-text">指令（Commands）</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#算术和逻辑运算（Arithmetic-and-Logic-Operations）"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">算术和逻辑运算（Arithmetic and Logic Operations）</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#内存访问（Memory-Access）"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">内存访问（Memory Access）</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#直接寻址（Direct-addressing）"><span class="post-toc-number">4.2.1.</span> <span class="post-toc-text">直接寻址（Direct addressing）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#立即数寻址（Immediate-addressing）"><span class="post-toc-number">4.2.2.</span> <span class="post-toc-text">立即数寻址（Immediate addressing）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#间接寻址（Indirect-addressing）"><span class="post-toc-number">4.2.3.</span> <span class="post-toc-text">间接寻址（Indirect addressing）</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#控制流（Flow-of-Control）"><span class="post-toc-number">4.3.</span> <span class="post-toc-text">控制流（Flow of Control）</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Hack的机器语言"><span class="post-toc-number">5.</span> <span class="post-toc-text">Hack的机器语言</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#概观"><span class="post-toc-number">5.1.</span> <span class="post-toc-text">概观</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#内存地址空间"><span class="post-toc-number">5.2.</span> <span class="post-toc-text">内存地址空间</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#寄存器"><span class="post-toc-number">5.3.</span> <span class="post-toc-text">寄存器</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#指令"><span class="post-toc-number">5.4.</span> <span class="post-toc-text">指令</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#A指令"><span class="post-toc-number">5.4.1.</span> <span class="post-toc-text">A指令</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#C指令"><span class="post-toc-number">5.4.2.</span> <span class="post-toc-text">C指令</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#comp部分"><span class="post-toc-number">5.4.2.1.</span> <span class="post-toc-text">comp部分</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#dest部分"><span class="post-toc-number">5.4.2.2.</span> <span class="post-toc-text">dest部分</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#jump部分"><span class="post-toc-number">5.4.2.3.</span> <span class="post-toc-text">jump部分</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#A寄存器的冲突使用"><span class="post-toc-number">5.4.2.4.</span> <span class="post-toc-text">A寄存器的冲突使用</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#符号（Symbols）"><span class="post-toc-number">5.5.</span> <span class="post-toc-text">符号（Symbols）</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#预定义符号（Predefined-symbols）"><span class="post-toc-number">5.5.1.</span> <span class="post-toc-text">预定义符号（Predefined symbols）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#标记符号（Label-symbols）"><span class="post-toc-number">5.5.2.</span> <span class="post-toc-text">标记符号（Label symbols）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#变量符号（Variable-symbols）"><span class="post-toc-number">5.5.3.</span> <span class="post-toc-text">变量符号（Variable symbols）</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#输入-输出处理（Input-Output-Handling）"><span class="post-toc-number">5.6.</span> <span class="post-toc-text">输入/输出处理（Input/Output Handling）</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#屏幕"><span class="post-toc-number">5.6.1.</span> <span class="post-toc-text">屏幕</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#键盘"><span class="post-toc-number">5.6.2.</span> <span class="post-toc-text">键盘</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#语法约定和文件格式（Syntax-Conventions-and-File-Format）"><span class="post-toc-number">5.7.</span> <span class="post-toc-text">语法约定和文件格式（Syntax Conventions and File Format）</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#二进制文件（Binary-code-files）"><span class="post-toc-number">5.7.1.</span> <span class="post-toc-text">二进制文件（Binary code files）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#汇编文件（Assembly-language-files）"><span class="post-toc-number">5.7.2.</span> <span class="post-toc-text">汇编文件（Assembly language files）</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#项目"><span class="post-toc-number">6.</span> <span class="post-toc-text">项目</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-nand2tetris-4"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">nand2tetris ch4 机器语言</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-07-07 00:00:04" datetime="2019-07-06T16:00:04.000Z"  itemprop="datePublished">2019-07-07</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/课程/">课程</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+			
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>机器语言处于软件和硬件之间，既是一个编程工具，也是硬件平台的组成部分。它旨在编写低级程序当作一系列的机器指令，这些指令命令处理器执行算术和逻辑运算、从内存中存取值、将一个寄存器的值移动到另一个寄存器、测试布尔条件等。和高级语言不同，机器语言的要求是直接执行和完全控制特定的硬件平台。</p>
+<p>了解用机器语言编写的低级程序，可以方便我们熟悉计算机系统。这不仅帮助我们理解如何编程，而且可以知道硬件为何这样设计。</p>
+<p>下面会先大致介绍机器语言，然后给出Hack的机器语言的具体细节，包括二进制版本（Binary）以及符号汇编版本（Symbolic assembly）。注意，我们在这里抽象底层硬件的具体实现，只需要关注一个处理器（Processor）、一个内存（Memory）、一些寄存器（Registers）。</p>
+<h1 id="机器（Machines）"><a href="#机器（Machines）" class="headerlink" title="机器（Machines）"></a>机器（Machines）</h1><h2 id="内存（Memory）"><a href="#内存（Memory）" class="headerlink" title="内存（Memory）"></a>内存（Memory）</h2><p>这里指存储数据和指令的设备。一个连续的固定字宽的单元的数组（Words or Locations），每一个单元都有唯一的地址（Address）。</p>
+<p>下面我们将内存中的某个字简称为Memory[address]，RAM[address]，或者 M[address]。</p>
+<h2 id="处理器（Processor）"><a href="#处理器（Processor）" class="headerlink" title="处理器（Processor）"></a>处理器（Processor）</h2><p>也叫做中央处理单元（Central Processing Unit or CPU），指能够执行一些固定的基本操作的设备，包括算术和逻辑操作，内存访问操作，控制（也被称作分支，Branching）操作。操作数（Operands）是来自寄存器或内存的二进制值，同样，操作结果也存放在寄存器或者内存中。</p>
+<h2 id="寄存器（Register）"><a href="#寄存器（Register）" class="headerlink" title="寄存器（Register）"></a>寄存器（Register）</h2><p>内存访问是一个相对较慢的操作，需要长指令格式（比如可能需要32位的地址）。于是，大多数处理器都配备有寄存器，每个寄存器能存一个值。寄存器相当于一个位于处理器的高速本地内存，可以快速操纵数据和指令。它使程序减少内存访问，以提高程序执行效率。</p>
+<h1 id="语言（Languages）"><a href="#语言（Languages）" class="headerlink" title="语言（Languages）"></a>语言（Languages）</h1><p>机器语言是一系列的被编码的指令，它的含义取决于硬件细节和机器语言语法。</p>
+<p>由于二进制码的含义相当晦涩，通常机器语言会指定它的二进制码（Binary codes）和符号助记符（Symbolic mnemonics）。</p>
+<p>比如，假设有某种add操作，可以直接写成1010001100011001，或者用符号写成ADD R3,R1,R9。</p>
+<p>我们不仅可以借助符号读程序，也可以这样写程序而不必使用二进制。我们可以使用一个文本处理程序，将符号解析为二进制机器指令。这个符号就叫做汇编语言（Assembly language, or simply assembly），这个程序叫做汇编器（Assembler），这个过程叫做汇编。</p>
+<p>不同的计算机的CPU的操作、寄存器的种类和数量、汇编语言的语法都有可能不同（a Tower of Babel of machine languages）。</p>
+<p>尽管不同，它们却都有一些相似的通用的命令。</p>
+<h1 id="指令（Commands）"><a href="#指令（Commands）" class="headerlink" title="指令（Commands）"></a>指令（Commands）</h1><h2 id="算术和逻辑运算（Arithmetic-and-Logic-Operations）"><a href="#算术和逻辑运算（Arithmetic-and-Logic-Operations）" class="headerlink" title="算术和逻辑运算（Arithmetic and Logic Operations）"></a>算术和逻辑运算（Arithmetic and Logic Operations）</h2><p>每一个计算机都要进行基本的算术和逻辑运算。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_4_0.png" alt="算术和逻辑运算" title>
+                </div>
+                <div class="image-caption">算术和逻辑运算</div>
+            </figure>
+<h2 id="内存访问（Memory-Access）"><a href="#内存访问（Memory-Access）" class="headerlink" title="内存访问（Memory Access）"></a>内存访问（Memory Access）</h2><p>内存访问指令有2类，一是算术和逻辑运算命令，可能不仅操纵寄存器，还有内存，二是存取（load and store）命令，会在寄存器和内存之间移动数据。内存访问命令有不同的寻址方式（Addressing modes），也就是获取内存的字的具体的方法。通常，不同的计算机提供不同的可能方式和表达，但是以下3种一般都会支持。</p>
+<h3 id="直接寻址（Direct-addressing）"><a href="#直接寻址（Direct-addressing）" class="headerlink" title="直接寻址（Direct addressing）"></a>直接寻址（Direct addressing）</h3><p>直接给出具体地址或者用符号表示一个具体的地址。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_4_1.png" alt="直接寻址" title>
+                </div>
+                <div class="image-caption">直接寻址</div>
+            </figure>
+<h3 id="立即数寻址（Immediate-addressing）"><a href="#立即数寻址（Immediate-addressing）" class="headerlink" title="立即数寻址（Immediate addressing）"></a>立即数寻址（Immediate addressing）</h3><p>加载常数（出现在指令编码中的值）到寄存器。不是这个常数所对应的地址上的值，而是这个常数本身。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_4_2.png" alt="立即数寻址" title>
+                </div>
+                <div class="image-caption">立即数寻址</div>
+            </figure>
+<h3 id="间接寻址（Indirect-addressing）"><a href="#间接寻址（Indirect-addressing）" class="headerlink" title="间接寻址（Indirect addressing）"></a>间接寻址（Indirect addressing）</h3><p>地址没有被硬编码到指令中，而是指定了一个保存所需地址的内存位置。这种方式被用于处理指针（Pointers）。</p>
+<p>比如，高级指令x=foo[j]，foo是一个数组变量，x、j是整型变量。在声明和初始化foo后，编译器分配一个内存段来保存数组数据，使foo指代一个段的基地址（Base address）。foo[j]就是在foo上偏移了一个j的地址上的值。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_4_3.png" alt="间接寻址" title>
+                </div>
+                <div class="image-caption">间接寻址</div>
+            </figure>
+<h2 id="控制流（Flow-of-Control）"><a href="#控制流（Flow-of-Control）" class="headerlink" title="控制流（Flow of Control）"></a>控制流（Flow of Control）</h2><p>当一个程序线性地执行命令时，可能会出现分支跳转到一个地址，而不是继续执行下一个命令。</p>
+<p>分支的目的有很多，比如循环（Repetition），条件执行（Conditional execution），子程序调用（Subroutine calling）。跳转的位置可以是一个给定的标记（Label）。</p>
+<p>跳转有无条件跳转（Unconditional jump）和有条件跳转（Conditional jump，可以有明确的布尔条件或者是上一个命令的作用）。</p>
+<p>以上为机器语言的介绍，接下来是Hack的机器语言的描述。</p>
+<h1 id="Hack的机器语言"><a href="#Hack的机器语言" class="headerlink" title="Hack的机器语言"></a>Hack的机器语言</h1><p>注意：Hack的机器语言是一种很简单的机器语言，现在大多数计算机都有比Hack更复杂的指令、数据类型、寄存器、指令格式、寻址方式（当然Hack可以用软件来实现它们）。</p>
+<h2 id="概观"><a href="#概观" class="headerlink" title="概观"></a>概观</h2><p>Hack是一个冯诺依曼结构的计算机，16位，组成部分有CPU、2个分立的存储模块（一个指令存储器、一个数据存储器）、2个内存映射I/O设备（一个屏幕、一个键盘）。</p>
+<h2 id="内存地址空间"><a href="#内存地址空间" class="headerlink" title="内存地址空间"></a>内存地址空间</h2><p>Hack程序员关注2个地址空间：指令存储器和数据存储器。2个存储器都是16位字长，15位的地址空间，即每个存储器存储容量是32K（即$2^{15}$）$\times$16 bit。</p>
+<p>CPU只执行指令存储器中的指令。这里的指令存储器是一个只读的设备，程序是由一些外部方法写入的。比如，一个预先烧录好的ROM芯片可以实现指令存储器。如果要一个新的程序需要换一个ROM。</p>
+<h2 id="寄存器"><a href="#寄存器" class="headerlink" title="寄存器"></a>寄存器</h2><p>关注2个16位的寄存器，D寄存器和A寄存器，它们可以被算术和逻辑指令操纵。D寄存器用来存数据，A寄存器当作数据以及地址（指令存储器或数据存储器的地址）的寄存器。</p>
+<p>A寄存器可以加快直接访问存储器。Hack的指令是16位的，地址是15位的，所以不可能把操作和地址放在一条指令中。于是Hack的内存访问指令会操纵一个隐式的地址，标记为M。</p>
+<p>比如，对于数据存储器，要实现的是D=Memory[516]-1，我们就先用一条指令设置A寄存器为516，再用一条D=M-1指令。</p>
+<p>比如，对于指令存储器，要实现的是goto 35，先用一条指令设置A寄存器为35，再使用goto指令，计算机会在下一个时钟周期取InstructionMemory[35]的指令。</p>
+<h2 id="指令"><a href="#指令" class="headerlink" title="指令"></a>指令</h2><p>Hack的2种基础指令：</p>
+<ul>
+<li>地址指令 A指令</li>
+<li>计算指令 C指令</li>
+</ul>
+<h3 id="A指令"><a href="#A指令" class="headerlink" title="A指令"></a>A指令</h3><p>设置A寄存器为一个15位的值。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_4_4.png" alt="A指令" title>
+                </div>
+                <div class="image-caption">A指令</div>
+            </figure>
+<p>A指令的3种用处：</p>
+<ul>
+<li>设置常数</li>
+<li>设置后续C指令阶段要操纵的数据存储器的地址</li>
+<li>设置后续C指令阶段要操纵的指令存储器的地址</li>
+</ul>
+<h3 id="C指令"><a href="#C指令" class="headerlink" title="C指令"></a>C指令</h3><p>决定计算机的所有可能操作。指令有3个部分，解决3个问题，计算什么（comp），在哪里存储被计算的值（dest），下一步做什么（jump）。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_4_5.png" alt="C指令" title>
+                </div>
+                <div class="image-caption">C指令</div>
+            </figure>
+<h4 id="comp部分"><a href="#comp部分" class="headerlink" title="comp部分"></a>comp部分</h4><p>这里出现的+、-等符号应作为助记符的一部分，而不是一种操作符（比如D+A可以当作ADD。。。？）</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_4_6.png" alt="comp" title>
+                </div>
+                <div class="image-caption">comp</div>
+            </figure>
+<h4 id="dest部分"><a href="#dest部分" class="headerlink" title="dest部分"></a>dest部分</h4><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_4_7.png" alt="dest" title>
+                </div>
+                <div class="image-caption">dest</div>
+            </figure>
+<h4 id="jump部分"><a href="#jump部分" class="headerlink" title="jump部分"></a>jump部分</h4><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_4_8.png" alt="jump" title>
+                </div>
+                <div class="image-caption">jump</div>
+            </figure>
+<h4 id="A寄存器的冲突使用"><a href="#A寄存器的冲突使用" class="headerlink" title="A寄存器的冲突使用"></a>A寄存器的冲突使用</h4><p>C指令中，A寄存器既可以用于访问数据存储器的M，也可以访问指令存储器。为了避免冲突，一条指令中A寄存器不能同时使用这2种用法。</p>
+<h2 id="符号（Symbols）"><a href="#符号（Symbols）" class="headerlink" title="符号（Symbols）"></a>符号（Symbols）</h2><p>在汇编语言中，访问一个内存地址，可以使用常数或者符号。</p>
+<p>符号有以下3种：</p>
+<h3 id="预定义符号（Predefined-symbols）"><a href="#预定义符号（Predefined-symbols）" class="headerlink" title="预定义符号（Predefined symbols）"></a>预定义符号（Predefined symbols）</h3><p>RAM的一部分地址可以用预定义符号指定。</p>
+<ul>
+<li>虚拟寄存器（Virtual registers）：用R0~R15指定RAM[0]~RAM[15]。</li>
+<li>预定义指针（Predefined pointers）：用SP、LCL、ARG、THIS、THAT指定RAM[0]~RAM[4]。</li>
+<li>I/O指针（I/O pointers）：用SCREEN、KBD指定RAM[16384]（RAM[0x4000]）和RAM[24576]（RAM[0x6000]），这是屏幕和键盘的内存映射的基地址。</li>
+</ul>
+<h3 id="标记符号（Label-symbols）"><a href="#标记符号（Label-symbols）" class="headerlink" title="标记符号（Label symbols）"></a>标记符号（Label symbols）</h3><p>用户定义的用于表示goto的目的地址的符号，用伪命令“(Xxx)”来声明。</p>
+<h3 id="变量符号（Variable-symbols）"><a href="#变量符号（Variable-symbols）" class="headerlink" title="变量符号（Variable symbols）"></a>变量符号（Variable symbols）</h3><p>用户定义的符号Xxx，Xxx不是预定义符号和标记符号，那么就是一个变量，汇编器会分配一个唯一的内存地址，从RAM[0x0010]开始。</p>
+<h2 id="输入-输出处理（Input-Output-Handling）"><a href="#输入-输出处理（Input-Output-Handling）" class="headerlink" title="输入/输出处理（Input/Output Handling）"></a>输入/输出处理（Input/Output Handling）</h2><p>Hack有2个外设（peripheral devices），屏幕和键盘。它们通过内存映射（memory maps）来交互。物理I/O设备和内存映射通过持续的刷新循环来同步。</p>
+<h3 id="屏幕"><a href="#屏幕" class="headerlink" title="屏幕"></a>屏幕</h3><p>256行、每行512个像素的黑白的屏幕。从RAM[0x4000]开始有8K words的内存映射，从左上角开始一个位代表一个像素，1=black，0=white。第r行第c列的像素被映射到RAM[0x4000+r*32+c/16]个word的第c%16位（从LSB到MSB）。</p>
+<h3 id="键盘"><a href="#键盘" class="headerlink" title="键盘"></a>键盘</h3><p>只有RAM[0x6000]一个word的内存映射，某按键被按下，这里存的就是ASCII码，没有按键按下就是0。</p>
+<p>其他的按键对应的数字：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_4_9.png" alt="键码" title>
+                </div>
+                <div class="image-caption">键码</div>
+            </figure>
+<h2 id="语法约定和文件格式（Syntax-Conventions-and-File-Format）"><a href="#语法约定和文件格式（Syntax-Conventions-and-File-Format）" class="headerlink" title="语法约定和文件格式（Syntax Conventions and File Format）"></a>语法约定和文件格式（Syntax Conventions and File Format）</h2><h3 id="二进制文件（Binary-code-files）"><a href="#二进制文件（Binary-code-files）" class="headerlink" title="二进制文件（Binary code files）"></a>二进制文件（Binary code files）</h3><p>扩展名为hack。一行一个16位01串，指定一个机器语言指令。</p>
+<h3 id="汇编文件（Assembly-language-files）"><a href="#汇编文件（Assembly-language-files）" class="headerlink" title="汇编文件（Assembly language files）"></a>汇编文件（Assembly language files）</h3><p>扩展名为asm。</p>
+<p>每行为一个Instruction或者 (Symbol)。</p>
+<p>常量非负且为10进制，用户定义的符号可以是字母、数字、下划线（_）、点（.）、美元符号（$）、冒号（:），不能以数字开头。</p>
+<p>//后为单行注释。</p>
+<p>约定标记名大写，变量名小写。</p>
+<h1 id="项目"><a href="#项目" class="headerlink" title="项目"></a>项目</h1><p>这次使用2个新的工具，汇编器和CPU模拟器。</p>
+<p><a href="https://www.nand2tetris.org/software" target="_blank" rel="noopener">下载</a></p>
+<p><a href="https://docs.wixstatic.com/ugd/44046b_759f4f811ad14e12ac45bc60dd679fa3.pdf" target="_blank" rel="noopener">汇编器的使用说明</a></p>
+<p><a href="https://docs.wixstatic.com/ugd/44046b_f63aba2611944e82974c9c5d5a3821fe.pdf" target="_blank" rel="noopener">CPU模拟器的使用说明</a></p>
+<p>project要求用汇编语言编写2个程序。</p>
+<p>乘法程序（Mult.asm）：实现R0乘R1，结果放在R2。</p>
+<p>I/O处理程序（Fill.asm）：按下任意按键屏幕变黑，否则变白。</p>
+<p>（我的代码见github</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2020-10-26T07:31:31.406Z" itemprop="dateUpdated">2020-10-26 15:31:31</time>
+</span><br>
+
+
+        
+        4 every answer y 4eay7 ?
+        
+    </div>
+    
+    <footer>
+        <a href="https://4eay7lab.com">
+            <img src="/img/profile.png" alt="eregerm">
+            eregerm
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nand2tetris/">nand2tetris</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/本科补全/">本科补全</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/计算机系统/">计算机系统</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://4eay7lab.com/2019/07/07/nand2tetris-4/&title=《nand2tetris ch4 机器语言》 — 4eay7_lab > blog&pic=https://4eay7lab.com/img/profile.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://4eay7lab.com/2019/07/07/nand2tetris-4/&title=《nand2tetris ch4 机器语言》 — 4eay7_lab > blog&source=a lab notebook" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://4eay7lab.com/2019/07/07/nand2tetris-4/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《nand2tetris ch4 机器语言》 — 4eay7_lab > blog&url=https://4eay7lab.com/2019/07/07/nand2tetris-4/&via=https://4eay7lab.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://4eay7lab.com/2019/07/07/nand2tetris-4/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2019/07/09/nand2tetris-5/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">nand2tetris ch5 计算机体系结构</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/07/07/nand2tetris-3/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">nand2tetris ch3 时序逻辑</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+        var id = location.pathname
+        if (location.pathname.length > 50) {
+          id = location.pathname.replace(/\/\d+\/\d+\/\d+\//, '').replace('/', '').substring(0, 50)
+        }
+        const gitalk = new Gitalk({
+          clientID: 'c354108a394b0f21401a',
+          clientSecret: 'fc532a46f8321f4488e8533b9849e0980af9e501',
+          repo: 'blog_comments',
+          owner: 'easypainttou',
+          admin: ['easypainttou'],
+          id: id,      // Ensure uniqueness and length less than 50
+          title: document.title.split('|')[0],
+          distractionFreeMode: false  // Facebook-like distraction free mode
+        })
+
+        gitalk.render('gitalk-container')
+    </script>
+</section>
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>eregerm &copy; 2019 - 2020</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://4eay7lab.com/2019/07/07/nand2tetris-4/&title=《nand2tetris ch4 机器语言》 — 4eay7_lab > blog&pic=https://4eay7lab.com/img/profile.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://4eay7lab.com/2019/07/07/nand2tetris-4/&title=《nand2tetris ch4 机器语言》 — 4eay7_lab > blog&source=a lab notebook" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://4eay7lab.com/2019/07/07/nand2tetris-4/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《nand2tetris ch4 机器语言》 — 4eay7_lab > blog&url=https://4eay7lab.com/2019/07/07/nand2tetris-4/&via=https://4eay7lab.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://4eay7lab.com/2019/07/07/nand2tetris-4/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACMElEQVR42u3a0W7jMAwEwP7/T+deeyjq7FJOAUujp8BwbE4CCBTJr694vb6tn1e+X7++P/n882m3LQwMjMcyXpcrCXr2Q1zHkMeGgYFxDuO3Ryfb4sqmmT/5TcwYGBgYl8nfDJZv9BgYGBgzRr5dJqneynsxMDDOYbQbX1Jii17/92dxDAyMBzJmR82/+fyR/gYGBsajGK9y5d9aTxaLqDAwMLZm5BtcG3pepGuTy1/vxMDA2JSRF7+SA2ReVsvLbdEVDAyMrRl3ldJmhf5ZEvnmP8HAwNiasd6kTELMW5Lt/RgYGLsy2o2yHZ64eZwiH7PAwMDYjjErjbUDFvmRtY0BAwPjBMZK2WulAbCSOP53HQMD4xhGXtxv25BJS7LouF63MDEwMLZjzFqGs/ZAQm2bqcMWJgYGxsMZ6+lg24Ccld4wMDBOZiSJWts2SIKuRyuSmREMDIwDGK9y5Ulk3hatz7sYGBjbMVYaA+1oxcqx9raZEQwMjAcyklJXO9rVUmcH3eg/wcDA2I4xK/q3h8+8GVCX5zAwMI5k5EHPjsGzTbnub2BgYGzEaIe92gGL/F3tiBgGBsbejFnpv4Xlm3LbEMXAwDiB0bY525fNxs5mhTwMDIy9Ge0IRT5IkR9KV9JNDAyMcxhJKCtjZLOCXR4VBgYGxucOq7Ma4Zv+BgYGBsZo210JMdqmMTAwDmDkKV2S2N01kPGRchsGBsYDGbNa1l2ht+9aamRiYGA8j/EP+BkZBiGN8tIAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>nand2tetris ch3 时序逻辑 | 4eay7_lab &gt; blog | a lab notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#4B59A9">
+    
+    
+    <meta name="keywords" content="计算机系统,nand2tetris,本科补全">
+    <meta name="description" content="概述1、2章的芯片都是组合逻辑电路（Combinational logic circuit），输出只取决于输入，不能保持状态。 时序逻辑电路（Sequential logic circuit）不仅能计算值，而且能够存储值（存在反馈回路）。">
+<meta name="keywords" content="计算机系统,nand2tetris,本科补全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nand2tetris ch3 时序逻辑">
+<meta property="og:url" content="https://4eay7lab.com/2019/07/07/nand2tetris-3/index.html">
+<meta property="og:site_name" content="4eay7_lab &gt; blog">
+<meta property="og:description" content="概述1、2章的芯片都是组合逻辑电路（Combinational logic circuit），输出只取决于输入，不能保持状态。 时序逻辑电路（Sequential logic circuit）不仅能计算值，而且能够存储值（存在反馈回路）。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_3_0.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_3_1.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_3_2.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_3_3.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_3_4.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_3_5.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_3_6.png">
+<meta property="og:updated_time" content="2020-10-26T07:31:31.405Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="nand2tetris ch3 时序逻辑">
+<meta name="twitter:description" content="概述1、2章的芯片都是组合逻辑电路（Combinational logic circuit），输出只取决于输入，不能保持状态。 时序逻辑电路（Sequential logic circuit）不仅能计算值，而且能够存储值（存在反馈回路）。">
+<meta name="twitter:image" content="https://4eay7lab.com/images/n2t_3_0.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="4eay7_lab &gt; blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/about" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/profile.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">eregerm</h5>
+          <a href="mailto:eregerm@outlook.com" title="eregerm@outlook.com" class="mail">eregerm@outlook.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/friends"  >
+                <i class="icon icon-lg icon-link"></i>
+                Friends
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-info"></i>
+                About
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/today"  >
+                <i class="icon icon-lg icon-file"></i>
+                Today
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/easypainttou" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">nand2tetris ch3 时序逻辑</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">nand2tetris ch3 时序逻辑</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2019-07-06T16:00:03.000Z" itemprop="datePublished" class="page-time">
+  2019-07-07
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/课程/">课程</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#概述"><span class="post-toc-number">1.</span> <span class="post-toc-text">概述</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#时钟（Clock）"><span class="post-toc-number">2.</span> <span class="post-toc-text">时钟（Clock）</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#触发器（Flip-flop）"><span class="post-toc-number">3.</span> <span class="post-toc-text">触发器（Flip-flop）</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#寄存器（Register）"><span class="post-toc-number">4.</span> <span class="post-toc-text">寄存器（Register）</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#1位的寄存器"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">1位的寄存器</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#w位的寄存器"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">w位的寄存器</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#存储器"><span class="post-toc-number">5.</span> <span class="post-toc-text">存储器</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#随机存取存储器（RAM）"><span class="post-toc-number">5.1.</span> <span class="post-toc-text">随机存取存储器（RAM）</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#存储器的递归构建"><span class="post-toc-number">5.2.</span> <span class="post-toc-text">存储器的递归构建</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#计数器（Counter）"><span class="post-toc-number">6.</span> <span class="post-toc-text">计数器（Counter）</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#消除组合逻辑中的冒险"><span class="post-toc-number">7.</span> <span class="post-toc-text">消除组合逻辑中的冒险</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#项目"><span class="post-toc-number">8.</span> <span class="post-toc-text">项目</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-nand2tetris-3"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">nand2tetris ch3 时序逻辑</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-07-07 00:00:03" datetime="2019-07-06T16:00:03.000Z"  itemprop="datePublished">2019-07-07</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/课程/">课程</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+			
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>1、2章的芯片都是组合逻辑电路（Combinational logic circuit），输出只取决于输入，不能保持状态。</p>
+<p>时序逻辑电路（Sequential logic circuit）不仅能计算值，而且能够存储值（存在反馈回路）。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_3_0.png" alt="组合逻辑和时序逻辑" title>
+                </div>
+                <div class="image-caption">组合逻辑和时序逻辑</div>
+            </figure>
+<p>存储器的实现涉及到同步、计时、反馈回路，最基础的时序电路芯片是触发器（Flip-flop），通过它可以构建出计算机系统的存储设备。当然现代计算机的存储器不总是用FF造的，现代存储芯片总是利用存储技术的基础物理特性实现最优化，用哪种技术取决于性价比。</p>
+<h1 id="时钟（Clock）"><a href="#时钟（Clock）" class="headerlink" title="时钟（Clock）"></a>时钟（Clock）</h1><p>在大多数计算机中，时间的流逝是通过一个主时钟（Master clock）传递一个连续的交流信号来表示的。</p>
+<p>硬件实现是基于一个有源晶振 或 振荡器（英文Oscillator，内部有时钟电路，供电即可产生振荡信号。还有一种无源晶振或谐振器，英文为Crystal，需要借助时钟电路产生振荡信号。硬件模拟器中需要用户或脚本实现），它会交替产生高低电平，一个0-1（或者 low-high/tick-tock）为一个周期（Cycle），每一个时钟周期是一个单位时间。</p>
+<p>这个信号被同时广播到计算机的每一个时序芯片上。</p>
+<h1 id="触发器（Flip-flop）"><a href="#触发器（Flip-flop）" class="headerlink" title="触发器（Flip-flop）"></a>触发器（Flip-flop）</h1><p>它是最基础的时序电路芯片，有多种变种，这里使用的是DFF（Data flip-flop，这里用到的似乎是下降沿触发的。。）。一位数据输入，一个时钟输入（信号来自主时钟），一位数据输出，实现$out(t)=in(t-1)$。</p>
+<h1 id="寄存器（Register）"><a href="#寄存器（Register）" class="headerlink" title="寄存器（Register）"></a>寄存器（Register）</h1><h2 id="1位的寄存器"><a href="#1位的寄存器" class="headerlink" title="1位的寄存器"></a>1位的寄存器</h2><p>用DFF造一个1位的寄存器，也叫做Bit。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_3_1.png" alt="1 bit" title>
+                </div>
+                <div class="image-caption">1 bit</div>
+            </figure>
+<h2 id="w位的寄存器"><a href="#w位的寄存器" class="headerlink" title="w位的寄存器"></a>w位的寄存器</h2><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_3_2.png" alt="w bit" title>
+                </div>
+                <div class="image-caption">w bit</div>
+            </figure>
+<h1 id="存储器"><a href="#存储器" class="headerlink" title="存储器"></a>存储器</h1><h2 id="随机存取存储器（RAM）"><a href="#随机存取存储器（RAM）" class="headerlink" title="随机存取存储器（RAM）"></a>随机存取存储器（RAM）</h2><p>读写操作要访问任意一个单元，访问的顺序没有限制，任意位置，访问速度一样。</p>
+<p>输入包括，一个数据输入、一个地址输入、一个load位。</p>
+<p>参数：</p>
+<ul>
+<li>字长（data-width）：一个word多少位</li>
+<li>字数（size）：多少个words</li>
+</ul>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_3_3.png" alt="RAMn" title>
+                </div>
+                <div class="image-caption">RAMn</div>
+            </figure>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_3_4.png" alt="RAMn" title>
+                </div>
+                <div class="image-caption">RAMn</div>
+            </figure>
+<h2 id="存储器的递归构建"><a href="#存储器的递归构建" class="headerlink" title="存储器的递归构建"></a>存储器的递归构建</h2><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_3_5.png" alt="存储器的递归构建" title>
+                </div>
+                <div class="image-caption">存储器的递归构建</div>
+            </figure>
+<h1 id="计数器（Counter）"><a href="#计数器（Counter）" class="headerlink" title="计数器（Counter）"></a>计数器（Counter）</h1><p>每个时间单位输出都有一个增量，$out(t)=out(t-1)+c$，c一般是1。通常计数器有一些额外的功能，可以从0或者某一个数（counting base）开始，可以是减少一个量。</p>
+<p>比如，CPU的程序计数器（Program counter，简称PC）</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_3_6.png" alt="PC" title>
+                </div>
+                <div class="image-caption">PC</div>
+            </figure>
+<h1 id="消除组合逻辑中的冒险"><a href="#消除组合逻辑中的冒险" class="headerlink" title="消除组合逻辑中的冒险"></a>消除组合逻辑中的冒险</h1><p>DFF使时序芯片保持一个状态或者改变一个状态，避免了组合电路的不可控的数据竞争（Data race）的影响。</p>
+<p>在改变输入值时，由于一些物理限制（距离、阻碍、干扰、噪声等），几个输入值传输到芯片的时间不一样（数电上称为竞争。。），会使输出在一段时间内产生不正确的结果（数电上称为冒险。。）。</p>
+<p>组合电路中输出只由输入控制，和时间无关，所以中间可能会出现不正确输出。</p>
+<p>时序电路中的DFF保证输出只在进入一个新的时钟周期的一刻改变（其他时间是锁存的），也就是我们允许在一个周期内出现不稳定的状态，在下一个周期开始时是合法的状态。</p>
+<p>所以消除冒险的方法是，时钟周期的时间比传输数据的时间稍长，保证时序芯片更新状态时的输入是合法的。由此实现系统硬件各个部分的同步来达到良好协调。</p>
+<h1 id="项目"><a href="#项目" class="headerlink" title="项目"></a>项目</h1><p>project依然是用之前造好的芯片来实现这一章的芯片（除了DFF）。（我的代码见github</p>
+<p>这一章的DFF不用了解具体实现（详细内容见数电课程），相当于之前的Nand，这里直接拿来构造其它时序电路就行。</p>
+<p>需要查看硬件模拟器使用说明的4-5部分，以及附录A6-7。</p>
+<p>需要建造的芯片列表：</p>
+<ul>
+<li>Bit</li>
+<li>Register</li>
+<li>PC</li>
+<li>RAM8</li>
+<li>RAM64</li>
+<li>RAM512</li>
+<li>RAM4K</li>
+<li>RAM16K</li>
+</ul>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2020-10-26T07:31:31.405Z" itemprop="dateUpdated">2020-10-26 15:31:31</time>
+</span><br>
+
+
+        
+        4 every answer y 4eay7 ?
+        
+    </div>
+    
+    <footer>
+        <a href="https://4eay7lab.com">
+            <img src="/img/profile.png" alt="eregerm">
+            eregerm
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nand2tetris/">nand2tetris</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/本科补全/">本科补全</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/计算机系统/">计算机系统</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://4eay7lab.com/2019/07/07/nand2tetris-3/&title=《nand2tetris ch3 时序逻辑》 — 4eay7_lab > blog&pic=https://4eay7lab.com/img/profile.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://4eay7lab.com/2019/07/07/nand2tetris-3/&title=《nand2tetris ch3 时序逻辑》 — 4eay7_lab > blog&source=a lab notebook" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://4eay7lab.com/2019/07/07/nand2tetris-3/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《nand2tetris ch3 时序逻辑》 — 4eay7_lab > blog&url=https://4eay7lab.com/2019/07/07/nand2tetris-3/&via=https://4eay7lab.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://4eay7lab.com/2019/07/07/nand2tetris-3/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2019/07/07/nand2tetris-4/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">nand2tetris ch4 机器语言</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/07/07/nand2tetris-2/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">nand2tetris ch2 布尔运算</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+        var id = location.pathname
+        if (location.pathname.length > 50) {
+          id = location.pathname.replace(/\/\d+\/\d+\/\d+\//, '').replace('/', '').substring(0, 50)
+        }
+        const gitalk = new Gitalk({
+          clientID: 'c354108a394b0f21401a',
+          clientSecret: 'fc532a46f8321f4488e8533b9849e0980af9e501',
+          repo: 'blog_comments',
+          owner: 'easypainttou',
+          admin: ['easypainttou'],
+          id: id,      // Ensure uniqueness and length less than 50
+          title: document.title.split('|')[0],
+          distractionFreeMode: false  // Facebook-like distraction free mode
+        })
+
+        gitalk.render('gitalk-container')
+    </script>
+</section>
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>eregerm &copy; 2019 - 2020</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://4eay7lab.com/2019/07/07/nand2tetris-3/&title=《nand2tetris ch3 时序逻辑》 — 4eay7_lab > blog&pic=https://4eay7lab.com/img/profile.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://4eay7lab.com/2019/07/07/nand2tetris-3/&title=《nand2tetris ch3 时序逻辑》 — 4eay7_lab > blog&source=a lab notebook" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://4eay7lab.com/2019/07/07/nand2tetris-3/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《nand2tetris ch3 时序逻辑》 — 4eay7_lab > blog&url=https://4eay7lab.com/2019/07/07/nand2tetris-3/&via=https://4eay7lab.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://4eay7lab.com/2019/07/07/nand2tetris-3/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACOklEQVR42u3aS3KDMBBFUfa/aTJ1yra4rxtSkXQZuVwYdDRo90fHga/z5Xr/5vX78f3k8/vTbrtkyJAxLeMcXnftE9mI2j0yZMjYh/Htxd/ueSJojsP0xZplyJAho538jZ8wDrgyZMiQ0WfwhJIkeTJkyJDRKWLTX6HXD5t3j9TiMmTImJDBy8u///zIfEOGDBlTMc7w4r8iqWFtDR/eJUOGjKUZPMClS+cJ5biFx0cIMmTIWJXBm1+kgORtNd5uQ9/IkCFjaUY/4KbL4mNO3vKTIUPG2ox0WemdBMkPcwT/GzJkyFiIwdOvtPVGDoTFxynI34MMGTKWY9SOU6QNsrRk5b+VIUPGPoxihAYhlQfc2ko+FLEyZMhYmpEmdjwEk+3obJMMGTLWZtQmCePwlyaLnWHqke6fDBkyJmTE085S8clb/+nYQIYMGfsw0lHBvccpOhv6K8OVIUPG0oxOO6zTsEuL52KlK0OGjMkZ4wKSF6tpCpiWtWhrZMiQsSUjHWTWFlcrdC+6hjJkyFiUkeZgcakJks5We06GDBkbMPgBVl5w1p5QHFfIkCFjAwYn1Q5Y8EMVaXNQhgwZazPO8OIN/Vrzjjz/IimUIUPGcoy75oP80Ea/6H1wzClDhox/zOBBtpbApU+rJY4yZMjYgcEDZScpTBt2QfiWIUOGjNLYIBhAhj3C4LCFDBkytmfUWv/pElGYliFDxgaM/jAgHYvW0koZMmTsyaj1su5aevqu1iBThgwZ8zF+AGEiGQaiCXf9AAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

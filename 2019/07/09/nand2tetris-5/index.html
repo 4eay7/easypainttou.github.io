@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>nand2tetris ch5 计算机体系结构 | 4eay7_lab &gt; blog | a lab notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#4B59A9">
+    
+    
+    <meta name="keywords" content="计算机系统,nand2tetris,本科补全">
+    <meta name="description" content="概述这一章是硬件部分（1-5章）的最后一章。这一章会使用1-3章的芯片造一个通用计算机（名为Hack），并且可以运行第4章的机器语言编写的程序。 Hack有2个优点，一是简单，几个小时就可以用芯片和硬件模拟器造出来，二是它能够说明任何数字计算机的关键操作和硬件组成。 存储程序概念（The Stored Program Concept）数字计算机是多功能的，能够在有限的硬件平台加载不同的程序，执行多">
+<meta name="keywords" content="计算机系统,nand2tetris,本科补全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nand2tetris ch5 计算机体系结构">
+<meta property="og:url" content="https://4eay7lab.com/2019/07/09/nand2tetris-5/index.html">
+<meta property="og:site_name" content="4eay7_lab &gt; blog">
+<meta property="og:description" content="概述这一章是硬件部分（1-5章）的最后一章。这一章会使用1-3章的芯片造一个通用计算机（名为Hack），并且可以运行第4章的机器语言编写的程序。 Hack有2个优点，一是简单，几个小时就可以用芯片和硬件模拟器造出来，二是它能够说明任何数字计算机的关键操作和硬件组成。 存储程序概念（The Stored Program Concept）数字计算机是多功能的，能够在有限的硬件平台加载不同的程序，执行多">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_5_0.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_5_1.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_5_2.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_5_3.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_5_4.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_5_5.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_5_6.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_5_7.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_4_4.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_4_5.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_5_8.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_5_9.png">
+<meta property="og:updated_time" content="2020-10-26T07:31:31.407Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="nand2tetris ch5 计算机体系结构">
+<meta name="twitter:description" content="概述这一章是硬件部分（1-5章）的最后一章。这一章会使用1-3章的芯片造一个通用计算机（名为Hack），并且可以运行第4章的机器语言编写的程序。 Hack有2个优点，一是简单，几个小时就可以用芯片和硬件模拟器造出来，二是它能够说明任何数字计算机的关键操作和硬件组成。 存储程序概念（The Stored Program Concept）数字计算机是多功能的，能够在有限的硬件平台加载不同的程序，执行多">
+<meta name="twitter:image" content="https://4eay7lab.com/images/n2t_5_0.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="4eay7_lab &gt; blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/about" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/profile.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">eregerm</h5>
+          <a href="mailto:eregerm@outlook.com" title="eregerm@outlook.com" class="mail">eregerm@outlook.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/friends"  >
+                <i class="icon icon-lg icon-link"></i>
+                Friends
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-info"></i>
+                About
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/today"  >
+                <i class="icon icon-lg icon-file"></i>
+                Today
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/easypainttou" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">nand2tetris ch5 计算机体系结构</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">nand2tetris ch5 计算机体系结构</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2019-07-08T16:00:00.000Z" itemprop="datePublished" class="page-time">
+  2019-07-09
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/课程/">课程</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#概述"><span class="post-toc-number">1.</span> <span class="post-toc-text">概述</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#存储程序概念（The-Stored-Program-Concept）"><span class="post-toc-number">2.</span> <span class="post-toc-text">存储程序概念（The Stored Program Concept）</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#冯诺依曼结构（The-von-Neumann-Architecture）"><span class="post-toc-number">3.</span> <span class="post-toc-text">冯诺依曼结构（The von Neumann Architecture）</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#存储器（Memory）"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">存储器（Memory）</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#数据存储器（Data-Memory）"><span class="post-toc-number">3.1.1.</span> <span class="post-toc-text">数据存储器（Data Memory）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#指令存储器（Instruction-Memory）"><span class="post-toc-number">3.1.2.</span> <span class="post-toc-text">指令存储器（Instruction Memory）</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#CPU（Central-Processing-Unit）"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">CPU（Central Processing Unit）</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#ALU（Arithmetic-Logic-Unit）"><span class="post-toc-number">3.2.1.</span> <span class="post-toc-text">ALU（Arithmetic Logic Unit）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#控制单元（Control-Unit）"><span class="post-toc-number">3.2.2.</span> <span class="post-toc-text">控制单元（Control Unit）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#寄存器（Registers）"><span class="post-toc-number">3.2.3.</span> <span class="post-toc-text">寄存器（Registers）</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#数据寄存器（Data-registers）"><span class="post-toc-number">3.2.3.1.</span> <span class="post-toc-text">数据寄存器（Data registers）</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#寻址寄存器（Addressing-registers）"><span class="post-toc-number">3.2.3.2.</span> <span class="post-toc-text">寻址寄存器（Addressing registers）</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#程序计数器寄存器（Program-counter-register）"><span class="post-toc-number">3.2.3.3.</span> <span class="post-toc-text">程序计数器寄存器（Program counter register）</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#输入和输出（Input-and-Output）"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">输入和输出（Input and Output）</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Hack硬件平台规范（The-Hack-Hardware-Platform-Specification）"><span class="post-toc-number">4.</span> <span class="post-toc-text">Hack硬件平台规范（The Hack Hardware Platform Specification）</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#概观"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">概观</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#CPU"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">CPU</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#ROM"><span class="post-toc-number">4.3.</span> <span class="post-toc-text">ROM</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#屏幕"><span class="post-toc-number">4.4.</span> <span class="post-toc-text">屏幕</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#键盘"><span class="post-toc-number">4.5.</span> <span class="post-toc-text">键盘</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#总内存（Overall-Memory）"><span class="post-toc-number">4.6.</span> <span class="post-toc-text">总内存（Overall Memory）</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#计算机（Computer）"><span class="post-toc-number">4.7.</span> <span class="post-toc-text">计算机（Computer）</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#实现"><span class="post-toc-number">4.8.</span> <span class="post-toc-text">实现</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#CPU的实现"><span class="post-toc-number">4.8.1.</span> <span class="post-toc-text">CPU的实现</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#指令译码"><span class="post-toc-number">4.8.1.1.</span> <span class="post-toc-text">指令译码</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#指令执行"><span class="post-toc-number">4.8.1.2.</span> <span class="post-toc-text">指令执行</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#取下一条指令"><span class="post-toc-number">4.8.1.3.</span> <span class="post-toc-text">取下一条指令</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#计算机的实现"><span class="post-toc-number">4.8.2.</span> <span class="post-toc-text">计算机的实现</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#总结"><span class="post-toc-number">4.9.</span> <span class="post-toc-text">总结</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#项目"><span class="post-toc-number">5.</span> <span class="post-toc-text">项目</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-nand2tetris-5"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">nand2tetris ch5 计算机体系结构</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-07-09 00:00:00" datetime="2019-07-08T16:00:00.000Z"  itemprop="datePublished">2019-07-09</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/课程/">课程</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+			
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>这一章是硬件部分（1-5章）的最后一章。这一章会使用1-3章的芯片造一个通用计算机（名为Hack），并且可以运行第4章的机器语言编写的程序。</p>
+<p>Hack有2个优点，一是简单，几个小时就可以用芯片和硬件模拟器造出来，二是它能够说明任何数字计算机的关键操作和硬件组成。</p>
+<h1 id="存储程序概念（The-Stored-Program-Concept）"><a href="#存储程序概念（The-Stored-Program-Concept）" class="headerlink" title="存储程序概念（The Stored Program Concept）"></a>存储程序概念（The Stored Program Concept）</h1><p>数字计算机是多功能的，能够在有限的硬件平台加载不同的程序，执行多种的任务，从交互式游戏到文字处理再到科学计算，这是存储程序概念带来的结果。</p>
+<h1 id="冯诺依曼结构（The-von-Neumann-Architecture）"><a href="#冯诺依曼结构（The-von-Neumann-Architecture）" class="headerlink" title="冯诺依曼结构（The von Neumann Architecture）"></a>冯诺依曼结构（The von Neumann Architecture）</h1><p>存储程序概念是抽象和实用的计算机模型的关键要素，最值得注意的是通用图灵机（universal Turing machine）（1936年）和冯诺依曼机（von Neumann machine）（1945年）。图灵机是一个抽象描述，用于分析计算机系统的逻辑基础。冯诺依曼机是一个实用的结构，它是现在几乎所有计算机的概念蓝图。</p>
+<p>冯诺依曼结构基于一个CPU，和存储设备交互，从输入设备获取数据，发送数据到输出设备。中心是基于存储程序概念，存储器存储数据和指令。下面讲这种结构的细节。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_5_0.png" alt="冯诺依曼结构" title>
+                </div>
+                <div class="image-caption">冯诺依曼结构</div>
+            </figure>
+<h2 id="存储器（Memory）"><a href="#存储器（Memory）" class="headerlink" title="存储器（Memory）"></a>存储器（Memory）</h2><p>冯诺依曼的存储器存储2种类型的信息：数据和指令。它们存储在不同的单元中，而它们都是以二进制形式表示，存储在基本的随机存取结构中：一个连续的固定字长的单元的数组（Words or Locations），每一个单元都有唯一的地址（Address）。通过提供地址来确定一个字。</p>
+<h3 id="数据存储器（Data-Memory）"><a href="#数据存储器（Data-Memory）" class="headerlink" title="数据存储器（Data Memory）"></a>数据存储器（Data Memory）</h3><p>高级程序的抽象部分，比如变量、数组、对象，以二进制形式存储在数据存储器。</p>
+<h3 id="指令存储器（Instruction-Memory）"><a href="#指令存储器（Instruction-Memory）" class="headerlink" title="指令存储器（Instruction Memory）"></a>指令存储器（Instruction Memory）</h3><p>高级程序命令被翻译成机器语言，以二进制形式储存在指令存储器。</p>
+<h2 id="CPU（Central-Processing-Unit）"><a href="#CPU（Central-Processing-Unit）" class="headerlink" title="CPU（Central Processing Unit）"></a>CPU（Central Processing Unit）</h2><p>CPU作为计算机结构的中心，执行被加载的程序的指令。指令告诉CPU进行各种计算、读写数据、条件跳转。CPU使用3个主要的硬件来执行任务：ALU、寄存器、控制单元。</p>
+<h3 id="ALU（Arithmetic-Logic-Unit）"><a href="#ALU（Arithmetic-Logic-Unit）" class="headerlink" title="ALU（Arithmetic Logic Unit）"></a>ALU（Arithmetic Logic Unit）</h3><p>进行低级的算术和逻辑运算。</p>
+<h3 id="控制单元（Control-Unit）"><a href="#控制单元（Control-Unit）" class="headerlink" title="控制单元（Control Unit）"></a>控制单元（Control Unit）</h3><p>指令是二进制编码，在它执行之前需要解码，并且其中的信息必须给一些硬件设备信号，以执行指令。解码就是由控制单元完成的。</p>
+<p>现在，CPU的操作可以被描述为一个循环：取指令，解码，执行，再取指令…</p>
+<h3 id="寄存器（Registers）"><a href="#寄存器（Registers）" class="headerlink" title="寄存器（Registers）"></a>寄存器（Registers）</h3><p>和RAM相比，寄存器可以更快捷地存取数据。</p>
+<p>寄存器有多种用处：</p>
+<h4 id="数据寄存器（Data-registers）"><a href="#数据寄存器（Data-registers）" class="headerlink" title="数据寄存器（Data registers）"></a>数据寄存器（Data registers）</h4><p>提供数据暂存功能。</p>
+<h4 id="寻址寄存器（Addressing-registers）"><a href="#寻址寄存器（Addressing-registers）" class="headerlink" title="寻址寄存器（Addressing registers）"></a>寻址寄存器（Addressing registers）</h4><p>地址被存储在寄存器，以访问内存地址，存取数据。</p>
+<h4 id="程序计数器寄存器（Program-counter-register）"><a href="#程序计数器寄存器（Program-counter-register）" class="headerlink" title="程序计数器寄存器（Program counter register）"></a>程序计数器寄存器（Program counter register）</h4><p>执行程序时，CPU必须始终保持跟踪，获取下一条指令的地址。这个地址被保存在一个特殊的寄存器PC中，也就是PC中的内容将作为下一条指令的地址。在执行指令时，PC会用2种方法中的一种更新：没有goto指令，PC把地址+1；有goto n，PC修改为n。</p>
+<h2 id="输入和输出（Input-and-Output）"><a href="#输入和输出（Input-and-Output）" class="headerlink" title="输入和输出（Input and Output）"></a>输入和输出（Input and Output）</h2><p>外设有很多，每种都代表着一种独特的机械设备，需要独特的工程知识。于是，计算机科学家设计了各种方案，使所有这些设备看起来与计算机相同。 此领域中最简单的技术称为内存映射I/O（memory-mapped I/O）。基本思路是创建一个I/O设备的二进制模拟，使它对于CPU来说就像一个普通的内存段。</p>
+<h1 id="Hack硬件平台规范（The-Hack-Hardware-Platform-Specification）"><a href="#Hack硬件平台规范（The-Hack-Hardware-Platform-Specification）" class="headerlink" title="Hack硬件平台规范（The Hack Hardware Platform Specification）"></a>Hack硬件平台规范（The Hack Hardware Platform Specification）</h1><h2 id="概观"><a href="#概观" class="headerlink" title="概观"></a>概观</h2><p>Hack是一个冯诺依曼结构的计算机，16位，组成部分有CPU、2个分立的存储模块（一个指令存储器、一个数据存储器）、2个内存映射I/O设备（一个屏幕、一个键盘）。</p>
+<p>CPU执行指令存储器中的指令。指令存储器是一个只读的设备，程序是由一些外部方法写入的。</p>
+<p>现在开始，我们认为Hack的数据存储器和指令存储器分别为RAM和ROM。</p>
+<p>CPU由ALU、D寄存器、A寄存器、PC寄存器组成。</p>
+<p>D、A是16位通用寄存器。D用来存数据。A用来存数据、或存放RAM地址、或存放ROM地址。</p>
+<p>机器语言基于2种指令类型，A指令、C指令。</p>
+<p>计算机的连接方式中，PC的输出被连接到ROM的地址输入。</p>
+<p>一个时钟周期，计算机的操作为：取指令，执行。一个“取指令-执行”周期表明一个内存访问操作一般包括寻址指令和一个后续指令（读写指令、分支指令）。</p>
+<h2 id="CPU"><a href="#CPU" class="headerlink" title="CPU"></a>CPU</h2><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_5_1.png" alt="CPU" title>
+                </div>
+                <div class="image-caption">CPU</div>
+            </figure>
+<h2 id="ROM"><a href="#ROM" class="headerlink" title="ROM"></a>ROM</h2><p>这是内建的，我们只要把程序加载进去。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_5_2.png" alt="ROM32K" title>
+                </div>
+                <div class="image-caption">ROM32K</div>
+            </figure>
+<h2 id="屏幕"><a href="#屏幕" class="headerlink" title="屏幕"></a>屏幕</h2><p>内建的，不需要实现内部细节。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_5_3.png" alt="屏幕" title>
+                </div>
+                <div class="image-caption">屏幕</div>
+            </figure>
+<h2 id="键盘"><a href="#键盘" class="headerlink" title="键盘"></a>键盘</h2><p>内建的，不需要实现内部细节。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_5_4.png" alt="键盘" title>
+                </div>
+                <div class="image-caption">键盘</div>
+            </figure>
+<p>特殊的键值：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_5_5.png" alt="键值" title>
+                </div>
+                <div class="image-caption">键值</div>
+            </figure>
+<h2 id="总内存（Overall-Memory）"><a href="#总内存（Overall-Memory）" class="headerlink" title="总内存（Overall Memory）"></a>总内存（Overall Memory）</h2><p>包括RAM和屏幕、键盘的内存映射。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_5_6.png" alt="数据存储器" title>
+                </div>
+                <div class="image-caption">数据存储器</div>
+            </figure>
+<h2 id="计算机（Computer）"><a href="#计算机（Computer）" class="headerlink" title="计算机（Computer）"></a>计算机（Computer）</h2><p>计算机芯片包含所有必要的硬件设备来操作计算机，包括CPU、数据存储器、指令存储器、屏幕、键盘。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_5_7.png" alt="计算机" title>
+                </div>
+                <div class="image-caption">计算机</div>
+            </figure>
+<p>这些当然还是在用HDL写，然后在硬件模拟器里模拟。</p>
+<p>这里建造的难点是CPU，其他的都很直接了。</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><h3 id="CPU的实现"><a href="#CPU的实现" class="headerlink" title="CPU的实现"></a>CPU的实现</h3><p>最难的是CPU。</p>
+<p>CPU就是取指令、执行。。。</p>
+<p>先了解A指令和C指令：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_4_4.png" alt="A指令" title>
+                </div>
+                <div class="image-caption">A指令</div>
+            </figure>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_4_5.png" alt="C指令" title>
+                </div>
+                <div class="image-caption">C指令</div>
+            </figure>
+<p>了解后可得到以下数据通路：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_5_8.png" alt="CPU的实现" title>
+                </div>
+                <div class="image-caption">CPU的实现</div>
+            </figure>
+<p>其中控制逻辑（control logic）没有详细给出（图中的C）。</p>
+<p>控制逻辑需要完成以下任务：</p>
+<h4 id="指令译码"><a href="#指令译码" class="headerlink" title="指令译码"></a>指令译码</h4><p>一条16位的指令可能是A指令或C指令。为了知道一条指令的含义，需要将一条指令分为‘i xx a cccccc ddd jjj’几个字段。</p>
+<ul>
+<li>i：若为0就是A指令，若为1就是C指令。</li>
+<li>a cccccc：C指令comp部分。</li>
+<li>ddd：C指令dest部分。</li>
+<li>jjj：C指令jump部分。</li>
+</ul>
+<p>A指令除了i位的低15位被解释成一个常数。</p>
+<h4 id="指令执行"><a href="#指令执行" class="headerlink" title="指令执行"></a>指令执行</h4><p>将‘i xx a cccccc ddd jjj’这几个部分同时发送到相应的结构执行相应操作。</p>
+<h4 id="取下一条指令"><a href="#取下一条指令" class="headerlink" title="取下一条指令"></a>取下一条指令</h4><p>执行一条指令的同时需要知道下一条指令。</p>
+<p>CPU使用PC的输出作为pc端的输出。</p>
+<p>t是现在的时间单元，默认的操作是$PC(t)=PC(t-1)+1$。如果需要goto n，需要先通过A指令把A寄存器设置为n，然后再跳转。</p>
+<p>所以我们需要实现以下逻辑：</p>
+<p>$PC(t)=\begin{cases}A(t-1),&amp;jump(t) \cr PC(t-1)+1,&amp;otherwise\end{cases}$</p>
+<h3 id="计算机的实现"><a href="#计算机的实现" class="headerlink" title="计算机的实现"></a>计算机的实现</h3><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_5_9.png" alt="计算机的实现" title>
+                </div>
+                <div class="image-caption">计算机的实现</div>
+            </figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Hack是一种最小化的计算机。然而从定性的角度来看，Hack与大多数数字计算机非常相似，因为它们都遵循相同的概念：冯诺依曼架构。</p>
+<p>在功能方面，计算机系统可分为两类：通用计算机，旨在轻松切换执行一个程序；专用计算机，通常嵌入其他系统，对于任何特定的应用程序，单个程序被烧录到专用计算机的ROM，是唯一可以执行的。（Hack应该是专用计算机。。。？） 除了这种差异，通用和专用计算机共享相同的架构思想：存储程序，获取-解码-执行的逻辑，CPU，寄存器，程序计数器等等。</p>
+<p>大多数通用计算机使用单个地址空间来存储数据和指令，而Hack将其分成两个独立的部分。</p>
+<p>在I / O方面，Hack键盘和屏幕相当简洁。</p>
+<p>设计中的大部分努力都是为了使计算机硬件有更好的性能。 因此，硬件架构课程和教科书通常围绕诸如内存层次结构（缓存），对I / O设备的更好访问，流水线，并行性，指令预取以及其他优化技术展开，当然在这门课程中都没有涉及。</p>
+<p>从历史上看，尝试提高处理器的性能已经导致了两个设计模式。 复杂指令集计算机（CISC）通过提供丰富的功能和复杂的指令来实现更好的性能。精简指令集计算机（RISC）使用更简单的指令集来促进硬件尽可能快速实施。 Hack计算机不属于以上2者（。。。）。</p>
+<h1 id="项目"><a href="#项目" class="headerlink" title="项目"></a>项目</h1><p>project是用之前造好的芯片来实现Hack电脑平台。（我的代码见github</p>
+<p>使用硬件模拟器测试。</p>
+<p>可能需要查看附录A和附录B。</p>
+<p>需要建造的芯片列表：</p>
+<ul>
+<li>Memory</li>
+<li>CPU</li>
+<li>Computer</li>
+</ul>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2020-10-26T07:31:31.407Z" itemprop="dateUpdated">2020-10-26 15:31:31</time>
+</span><br>
+
+
+        
+        4 every answer y 4eay7 ?
+        
+    </div>
+    
+    <footer>
+        <a href="https://4eay7lab.com">
+            <img src="/img/profile.png" alt="eregerm">
+            eregerm
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nand2tetris/">nand2tetris</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/本科补全/">本科补全</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/计算机系统/">计算机系统</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://4eay7lab.com/2019/07/09/nand2tetris-5/&title=《nand2tetris ch5 计算机体系结构》 — 4eay7_lab > blog&pic=https://4eay7lab.com/img/profile.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://4eay7lab.com/2019/07/09/nand2tetris-5/&title=《nand2tetris ch5 计算机体系结构》 — 4eay7_lab > blog&source=a lab notebook" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://4eay7lab.com/2019/07/09/nand2tetris-5/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《nand2tetris ch5 计算机体系结构》 — 4eay7_lab > blog&url=https://4eay7lab.com/2019/07/09/nand2tetris-5/&via=https://4eay7lab.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://4eay7lab.com/2019/07/09/nand2tetris-5/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2019/07/11/nand2tetris-6/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">nand2tetris ch6 汇编器</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/07/07/nand2tetris-4/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">nand2tetris ch4 机器语言</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+        var id = location.pathname
+        if (location.pathname.length > 50) {
+          id = location.pathname.replace(/\/\d+\/\d+\/\d+\//, '').replace('/', '').substring(0, 50)
+        }
+        const gitalk = new Gitalk({
+          clientID: 'c354108a394b0f21401a',
+          clientSecret: 'fc532a46f8321f4488e8533b9849e0980af9e501',
+          repo: 'blog_comments',
+          owner: 'easypainttou',
+          admin: ['easypainttou'],
+          id: id,      // Ensure uniqueness and length less than 50
+          title: document.title.split('|')[0],
+          distractionFreeMode: false  // Facebook-like distraction free mode
+        })
+
+        gitalk.render('gitalk-container')
+    </script>
+</section>
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>eregerm &copy; 2019 - 2020</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://4eay7lab.com/2019/07/09/nand2tetris-5/&title=《nand2tetris ch5 计算机体系结构》 — 4eay7_lab > blog&pic=https://4eay7lab.com/img/profile.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://4eay7lab.com/2019/07/09/nand2tetris-5/&title=《nand2tetris ch5 计算机体系结构》 — 4eay7_lab > blog&source=a lab notebook" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://4eay7lab.com/2019/07/09/nand2tetris-5/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《nand2tetris ch5 计算机体系结构》 — 4eay7_lab > blog&url=https://4eay7lab.com/2019/07/09/nand2tetris-5/&via=https://4eay7lab.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://4eay7lab.com/2019/07/09/nand2tetris-5/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACLklEQVR42u3aQW7DMAwF0dz/0u42QFBpPukWMTVaBYbr6DkAS1J8vfC63tbnlffr6/vJ58+n3bZkyJDxWMa1XHe9p/UTyPeuX5wMGTJOYPz2aBIW7wKvn7zZswwZMmSUqGsYD/QyZMiQUWPUEkqS5MmQIUNGp4hdfxlJCr+iFpchQ8YDGby8/P/Pf3K+IUOGjEcxrnDxorR2pbZkyJAxm8EDHE8c09KXH3Nu7pQhQ8YBDN6+5+kjL03XhS65IkOGjNkMPvSQNss6x5xpy0+GDBlTGWlA5OE4PTZI00SUFMqQIWMoozY2kYbp4jhFbcxChgwZ4xiosRUeNKYla1xCy5Ah42BGutFOWZsmjqiIlSFDxjgGj2O1JLIzjrYpcWXIkDGaUTs36LTVSLlbPEyVIUPGMQweLmsbTe+JZ0ZkyJBxAKMWiNODzNrr21yRIUPGUEbalCfJHC9feRkcd/tkyJAxjkE2xAvadMCLlLXxsIUMGTIGMWpJG99iemzAC93NbyJDhowDGJ0gy8dV07Ryc48MGTKOYdSSM96G4yE4bb3JkCHjBEatEK0VvelfoX8MMmTIGMq4wsXLS75d8pxNuStDhozRDL46AbczCVJrAsqQIWMeIx2bSEl3DWFshkVkyJBxACMNlKQMrjXXWqWsDBkyZOCtp1NbtTEOGTJkyIgPEXHrP90iCtMyZMg4gMFTunQggwfiViEtQ4aM0QxeOqYNfZ4m9o8KZMiQMZTxA0LgslByTtnNAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

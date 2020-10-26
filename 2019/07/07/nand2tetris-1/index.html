@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>nand2tetris ch1 布尔逻辑 | 4eay7_lab &gt; blog | a lab notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#4B59A9">
+    
+    
+    <meta name="keywords" content="计算机系统,nand2tetris,本科补全">
+    <meta name="description" content="概述基于物理学制造出晶体管，晶体管和电路构造出与非门（Nand），与非门（或者 或非门，它们是primitive gates，其它门都是composite gates）可以构造出与门、或门、非门，于是可构造出各种数字电路（任何布尔表达式都可以用与、或、非表示）。所以要构建计算机（课程中名为Hack，一个16位计算机），首先需要了解的是Nand相关的知识。 学习Nand前，先学习布尔代数、真值表、布">
+<meta name="keywords" content="计算机系统,nand2tetris,本科补全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nand2tetris ch1 布尔逻辑">
+<meta property="og:url" content="https://4eay7lab.com/2019/07/07/nand2tetris-1/index.html">
+<meta property="og:site_name" content="4eay7_lab &gt; blog">
+<meta property="og:description" content="概述基于物理学制造出晶体管，晶体管和电路构造出与非门（Nand），与非门（或者 或非门，它们是primitive gates，其它门都是composite gates）可以构造出与门、或门、非门，于是可构造出各种数字电路（任何布尔表达式都可以用与、或、非表示）。所以要构建计算机（课程中名为Hack，一个16位计算机），首先需要了解的是Nand相关的知识。 学习Nand前，先学习布尔代数、真值表、布">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_1_0.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_1_1.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_1_2.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_1_3.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_1_4.png">
+<meta property="og:image" content="https://4eay7lab.com/images/n2t_1_5.png">
+<meta property="og:updated_time" content="2020-10-26T07:31:31.405Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="nand2tetris ch1 布尔逻辑">
+<meta name="twitter:description" content="概述基于物理学制造出晶体管，晶体管和电路构造出与非门（Nand），与非门（或者 或非门，它们是primitive gates，其它门都是composite gates）可以构造出与门、或门、非门，于是可构造出各种数字电路（任何布尔表达式都可以用与、或、非表示）。所以要构建计算机（课程中名为Hack，一个16位计算机），首先需要了解的是Nand相关的知识。 学习Nand前，先学习布尔代数、真值表、布">
+<meta name="twitter:image" content="https://4eay7lab.com/images/n2t_1_0.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="4eay7_lab &gt; blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/about" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/profile.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">eregerm</h5>
+          <a href="mailto:eregerm@outlook.com" title="eregerm@outlook.com" class="mail">eregerm@outlook.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/friends"  >
+                <i class="icon icon-lg icon-link"></i>
+                Friends
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-info"></i>
+                About
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/today"  >
+                <i class="icon icon-lg icon-file"></i>
+                Today
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/easypainttou" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">nand2tetris ch1 布尔逻辑</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">nand2tetris ch1 布尔逻辑</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2019-07-06T16:00:01.000Z" itemprop="datePublished" class="page-time">
+  2019-07-07
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/课程/">课程</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#概述"><span class="post-toc-number">1.</span> <span class="post-toc-text">概述</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#基本逻辑门"><span class="post-toc-number">2.</span> <span class="post-toc-text">基本逻辑门</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#与门、或门、非门"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">与门、或门、非门</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#异或门（Exclusive-or）"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">异或门（Exclusive or）</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#数据选择器（Multiplexor）"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">数据选择器（Multiplexor）</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#数据分配器（Demultiplexor）"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">数据分配器（Demultiplexor）</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#多位（Multi-bit）版本的基本门电路"><span class="post-toc-number">3.</span> <span class="post-toc-text">多位（Multi-bit）版本的基本门电路</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#多路（Multi-way）版本的基本门电路"><span class="post-toc-number">4.</span> <span class="post-toc-text">多路（Multi-way）版本的基本门电路</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#硬件描述语言（HDL）"><span class="post-toc-number">5.</span> <span class="post-toc-text">硬件描述语言（HDL）</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#项目"><span class="post-toc-number">6.</span> <span class="post-toc-text">项目</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-nand2tetris-1"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">nand2tetris ch1 布尔逻辑</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-07-07 00:00:01" datetime="2019-07-06T16:00:01.000Z"  itemprop="datePublished">2019-07-07</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/课程/">课程</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+			
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>基于物理学制造出晶体管，晶体管和电路构造出与非门（Nand），与非门（或者 或非门，它们是primitive gates，其它门都是composite gates）可以构造出与门、或门、非门，于是可构造出各种数字电路（任何布尔表达式都可以用与、或、非表示）。<br>所以要构建计算机（课程中名为Hack，一个16位计算机），首先需要了解的是Nand相关的知识。</p>
+<p>学习Nand前，先学习布尔代数、真值表、布尔表达式、范式，这些在此不做总结。</p>
+<p>这里我们只关注一个芯片的外部接口（输入、输出），不关注具体实现。</p>
+<h1 id="基本逻辑门"><a href="#基本逻辑门" class="headerlink" title="基本逻辑门"></a>基本逻辑门</h1><h2 id="与门、或门、非门"><a href="#与门、或门、非门" class="headerlink" title="与门、或门、非门"></a>与门、或门、非门</h2><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_1_0.png" alt="and or not" title>
+                </div>
+                <div class="image-caption">and or not</div>
+            </figure>
+<h2 id="异或门（Exclusive-or）"><a href="#异或门（Exclusive-or）" class="headerlink" title="异或门（Exclusive or）"></a>异或门（Exclusive or）</h2><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_1_1.png" alt="xor" title>
+                </div>
+                <div class="image-caption">xor</div>
+            </figure>
+<h2 id="数据选择器（Multiplexor）"><a href="#数据选择器（Multiplexor）" class="headerlink" title="数据选择器（Multiplexor）"></a>数据选择器（Multiplexor）</h2><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_1_2.png" alt="mux" title>
+                </div>
+                <div class="image-caption">mux</div>
+            </figure>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_1_3.png" alt="mux真值表" title>
+                </div>
+                <div class="image-caption">mux真值表</div>
+            </figure>
+<h2 id="数据分配器（Demultiplexor）"><a href="#数据分配器（Demultiplexor）" class="headerlink" title="数据分配器（Demultiplexor）"></a>数据分配器（Demultiplexor）</h2><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_1_4.png" alt="dmux" title>
+                </div>
+                <div class="image-caption">dmux</div>
+            </figure>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/n2t_1_5.png" alt="dmux真值表" title>
+                </div>
+                <div class="image-caption">dmux真值表</div>
+            </figure>
+<h1 id="多位（Multi-bit）版本的基本门电路"><a href="#多位（Multi-bit）版本的基本门电路" class="headerlink" title="多位（Multi-bit）版本的基本门电路"></a>多位（Multi-bit）版本的基本门电路</h1><p>输入输出可能是多于1位的二进制数，按位做运算。</p>
+<h1 id="多路（Multi-way）版本的基本门电路"><a href="#多路（Multi-way）版本的基本门电路" class="headerlink" title="多路（Multi-way）版本的基本门电路"></a>多路（Multi-way）版本的基本门电路</h1><p>有更多的输入输出针脚，实现类似操作。</p>
+<h1 id="硬件描述语言（HDL）"><a href="#硬件描述语言（HDL）" class="headerlink" title="硬件描述语言（HDL）"></a>硬件描述语言（HDL）</h1><p>现实生活中要生产芯片，需要电路要达到预期的功能，最快的速度，最少的花费，大多数人不会直接制造，而是会先在软件上模拟电路的运行。</p>
+<p>课程提供了一个硬件模拟器。</p>
+<p><a href="https://www.nand2tetris.org/software" target="_blank" rel="noopener">下载</a></p>
+<p><a href="https://docs.wixstatic.com/ugd/44046b_bfd91435260748439493a60a8044ade6.pdf" target="_blank" rel="noopener">使用说明</a></p>
+<p>HDL的编写和测试脚本的编写见书附录A、B。</p>
+<h1 id="项目"><a href="#项目" class="headerlink" title="项目"></a>项目</h1><p>project要求使用内建的Nand，编写HDL代码构造其他芯片（我的代码见github</p>
+<p>需要运行硬件模拟器，查看其使用说明的1-3部分，以及附录A1-6。</p>
+<p>需要建造的芯片列表：</p>
+<ul>
+<li>Not</li>
+<li>Not16</li>
+<li>And</li>
+<li>And16</li>
+<li>Or</li>
+<li>Or8Way</li>
+<li>Or16</li>
+<li>DMux</li>
+<li>DMux4Way</li>
+<li>DMux8Way</li>
+<li>Mux</li>
+<li>Mux16</li>
+<li>Mux4Way16</li>
+<li>Mux8Way16</li>
+<li>Xor</li>
+</ul>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2020-10-26T07:31:31.405Z" itemprop="dateUpdated">2020-10-26 15:31:31</time>
+</span><br>
+
+
+        
+        4 every answer y 4eay7 ?
+        
+    </div>
+    
+    <footer>
+        <a href="https://4eay7lab.com">
+            <img src="/img/profile.png" alt="eregerm">
+            eregerm
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nand2tetris/">nand2tetris</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/本科补全/">本科补全</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/计算机系统/">计算机系统</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://4eay7lab.com/2019/07/07/nand2tetris-1/&title=《nand2tetris ch1 布尔逻辑》 — 4eay7_lab > blog&pic=https://4eay7lab.com/img/profile.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://4eay7lab.com/2019/07/07/nand2tetris-1/&title=《nand2tetris ch1 布尔逻辑》 — 4eay7_lab > blog&source=a lab notebook" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://4eay7lab.com/2019/07/07/nand2tetris-1/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《nand2tetris ch1 布尔逻辑》 — 4eay7_lab > blog&url=https://4eay7lab.com/2019/07/07/nand2tetris-1/&via=https://4eay7lab.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://4eay7lab.com/2019/07/07/nand2tetris-1/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2019/07/07/nand2tetris-2/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">nand2tetris ch2 布尔运算</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/07/07/nand2tetris-0/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">nand2tetris ch0 介绍</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+        var id = location.pathname
+        if (location.pathname.length > 50) {
+          id = location.pathname.replace(/\/\d+\/\d+\/\d+\//, '').replace('/', '').substring(0, 50)
+        }
+        const gitalk = new Gitalk({
+          clientID: 'c354108a394b0f21401a',
+          clientSecret: 'fc532a46f8321f4488e8533b9849e0980af9e501',
+          repo: 'blog_comments',
+          owner: 'easypainttou',
+          admin: ['easypainttou'],
+          id: id,      // Ensure uniqueness and length less than 50
+          title: document.title.split('|')[0],
+          distractionFreeMode: false  // Facebook-like distraction free mode
+        })
+
+        gitalk.render('gitalk-container')
+    </script>
+</section>
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>eregerm &copy; 2019 - 2020</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://4eay7lab.com/2019/07/07/nand2tetris-1/&title=《nand2tetris ch1 布尔逻辑》 — 4eay7_lab > blog&pic=https://4eay7lab.com/img/profile.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://4eay7lab.com/2019/07/07/nand2tetris-1/&title=《nand2tetris ch1 布尔逻辑》 — 4eay7_lab > blog&source=a lab notebook" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://4eay7lab.com/2019/07/07/nand2tetris-1/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《nand2tetris ch1 布尔逻辑》 — 4eay7_lab > blog&url=https://4eay7lab.com/2019/07/07/nand2tetris-1/&via=https://4eay7lab.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://4eay7lab.com/2019/07/07/nand2tetris-1/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACMUlEQVR42u3aS24CQRAEUe5/aby1ZA1EZhmkqY5ZIYTofiyK+j0e+HmC5+rzv98hr/9+2789MmTIuC2DXO71pdNTyOn8bjJkyDiHcXXw1Wc+ETRfh+k3d5YhQ4YMcOkUxgO9DBkyZHQBN03syOfTc2XIkHEaIw18QXmJf7Iv1eIyZMi4IYOXl99//ZH5hgwZMm7FeIYPL0q7d7pHhgwZuxk8wKVInlCSMScaiMqQIWMpgze/0gJ1sroRvyNDhozVjC7g8mZZNwrlixej/w0ZMmTchJGmd2lI5SE7TRPf/G/IkCFjEYO0z/gxaWMuXqd4/fcgQ4aMpYxunaIbf/KSNS6hZciQcQCjKzJ5YkcCbpwIXhWxMmTIOIDBU8a0cTZZR3tzBxkyZKxmdAd34wFeAJfDVBkyZBzASBcduot2P1+8bCFDhozVjK6hnxarXUIZ74zIkCFjEYM35Ukyl6aYfPBZPjJkyFjE4ClaF3YnZW0QZGXIkLGawVO6blUi3YtIeTJkyNjNSBtek+KTDwPi9pwMGTKOZMzTNV7ozltvMmTIOIExXyQlWSc/Kz5FhgwZSxnP8OEN/fSn4d9/mRTKkCFjKaMbZ5IxJO+DpUXvaMwpQ4aM2zLStYn50li3hFHuhsiQIWMRYzIM4FeZL4GhwYAMGTKOZ3SNs0nYRdFVhgwZMsDqA+elV0RhWoYMGQcwumEAT+C6hYyPtNtkyJBxQ0bXyyLttm45oxsVyJAhYynjB+Jq2xlOoO1OAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
