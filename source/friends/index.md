@@ -15,3 +15,4 @@ reward: false
 - [Brethland](http://www.yuki.systems/)
 - [0xfaner](https://0xfaner.top/)
 - [Yuhi](https://yuhi.xyz/)
+- [gocifer](https://gocifer.github.io)
